@@ -1,14 +1,25 @@
+import React from 'react';
+import { NativeBaseProvider } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
+import Login from './src/component/login/Login';
+
+const App = () => {
+  const Stack = createNativeStackNavigator();
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
+          <Stack.Screen name="Home" component={Login} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -18,3 +29,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
