@@ -14,10 +14,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  redButton: {
+  blueButton: {
     backgroundColor: '#011F5B',
   },
-  blueButton: {
+  redButton: {
     backgroundColor: '#990000',
   },
   formBackground: {
