@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, Text, StatusBar, Image, Button } from 'react-native';
-import Data from './data/index.js';
+import {
+  View, FlatList, StyleSheet, Text, StatusBar, Image, Button,
+} from 'react-native';
+import Data from './data/index';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,11 +41,13 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    direction: 'rtl'
+    direction: 'rtl',
   },
 });
 
-const Item = ({ title, price, lister, image }) => (
+const Item = ({
+  title, price, lister, image,
+}) => (
   <View style={styles.item}>
     <View style={styles.infoContainer}>
       <Text style={styles.title}>{title}</Text>
@@ -51,26 +55,24 @@ const Item = ({ title, price, lister, image }) => (
       <Text style={styles.lister}>Seller: {lister}</Text>
     </View>
     <View style={styles.imageContainer}>
-      <Image 
-      style={styles.image}
-      source={{uri: image}}/>
+      <Image
+        style={styles.image}
+        source={{ uri: image }}
+      />
     </View>
   </View>
 );
 
-const handlePress = (e) => {
-
-}
-
-const total = Data.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0)
-
+const total = Data.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
 
 const Cart = ({ navigation }) => {
   const renderItem = ({ item }) => (
-    <Item title={item.title} 
-    price={item.price} 
-    lister={item.lister} 
-    image={item.image}/>
+    <Item
+      title={item.title}
+      price={item.price}
+      lister={item.lister}
+      image={item.image}
+    />
   );
 
   return (
@@ -79,15 +81,16 @@ const Cart = ({ navigation }) => {
       <FlatList
         data={Data}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
       />
-      <Text style={{textAlign: 'center', fontSize: 16, }}>Total: ${total}</Text>
-      <Button 
-      onPress={() => navigation.navigate('Checkout')}
-      title="Checkout"
-      color="#1238a1"/>
+      <Text style={{ textAlign: 'center', fontSize: 16 }}>Total: ${total}</Text>
+      <Button
+        onPress={() => navigation.navigate('Checkout')}
+        title="Checkout"
+        color="#1238a1"
+      />
     </View>
   );
-}
+};
 
 export default Cart;

@@ -1,6 +1,8 @@
-import {React, useState } from 'react';
-import { TextInput, View, FlatList, StyleSheet, Text, StatusBar, Image, Button } from 'react-native';
-import Data from './data/index.js';
+import { React, useState } from 'react';
+import {
+  TextInput, View, FlatList, StyleSheet, Text, StatusBar, Image, Button,
+} from 'react-native';
+import Data from './data/index';
 
 const styles = StyleSheet.create({
   cart: {
@@ -11,13 +13,13 @@ const styles = StyleSheet.create({
     flex: 2,
     borderWidth: 3,
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 10,
     marginTop: 10,
   },
   confirm: {
     flex: 1,
-    flexDirection: "row"
+    flexDirection: 'row',
   },
   header: {
     fontSize: 32,
@@ -50,17 +52,19 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    direction: 'rtl'
+    direction: 'rtl',
   },
   input: {
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
-    width: "90%",
-  }
+    width: '90%',
+  },
 });
 
-const Item = ({ title, price, lister, image }) => (
+const Item = ({
+  title, price, lister, image,
+}) => (
   <View style={styles.item}>
     <View style={styles.infoContainer}>
       <Text style={styles.title}>{title}</Text>
@@ -68,16 +72,17 @@ const Item = ({ title, price, lister, image }) => (
       <Text style={styles.lister}>Seller: {lister}</Text>
     </View>
     <View style={styles.imageContainer}>
-      <Image 
-      style={styles.image}
-      source={{uri: image}}/>
+      <Image
+        style={styles.image}
+        source={{ uri: image }}
+      />
     </View>
   </View>
 );
 
-const total = Data.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0)
+const total = Data.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
 const discount = 0.00;
-const tax = .08;
+const tax = 0.08;
 
 const Checkout = ({ navigation }) => {
   const [num, setNum] = useState('');
@@ -87,81 +92,83 @@ const Checkout = ({ navigation }) => {
   const [last, setLast] = useState('');
 
   const renderItem = ({ item }) => (
-    <Item title={item.title} 
-    price={item.price} 
-    lister={item.lister} 
-    image={item.image}/>
+    <Item
+      title={item.title}
+      price={item.price}
+      lister={item.lister}
+      image={item.image}
+    />
   );
 
   return (
-    <View style={{ flexDirection: "column", flex: 1}}>
+    <View style={{ flexDirection: 'column', flex: 1 }}>
       <View style={styles.cart}>
         <Text style={styles.header}>Items</Text>
         <FlatList
           data={Data}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
         />
       </View>
       <View style={styles.pay}>
-        <Text style={{ fontSize: 22 , textAlign: "center"}}>Pay With: </Text>
-        <TextInput 
+        <Text style={{ fontSize: 22, textAlign: 'center' }}>Pay With: </Text>
+        <TextInput
           style={styles.input}
           onChangeText={setNum}
           value={num.toString()}
-          keyboardType={'number-pad'}
+          keyboardType="number-pad"
           placeholder="Card Number"
         />
-        <TextInput 
+        <TextInput
           style={styles.input}
           onChangeText={setExp}
           value={exp}
-          keyboardType={'number-pad'}
+          keyboardType="number-pad"
           placeholder="Exp. Date"
         />
-        <TextInput 
+        <TextInput
           style={styles.input}
           onChangeText={setCVC}
           value={cvc.toString()}
-          keyboardType={'number-pad'}
+          keyboardType="number-pad"
           placeholder="CVC"
         />
-        <TextInput 
+        <TextInput
           style={styles.input}
           onChangeText={setFirst}
           value={first}
-          keyboardType={'default'}
+          keyboardType="default"
           placeholder="First Name"
         />
-        <TextInput 
+        <TextInput
           style={styles.input}
           onChangeText={setLast}
           value={last}
-          keyboardType={'default'}
+          keyboardType="default"
           placeholder="Last Name"
         />
       </View>
       <View style={styles.confirm}>
         <View style={{ flex: 1 }}>
           <Text style={{ paddingLeft: 50 }}>
-          Subtotal ({Data.length} items):{"\n"}
-          Discount:{"\n"}
-          Tax:{"\n"}
-          Order total: 
+            Subtotal ({Data.length} items):{'\n'}
+            Discount:{'\n'}
+            Tax:{'\n'}
+            Order total:
           </Text>
-          <Button title="Confirm and Pay"/>
+          <Button title="Confirm and Pay" />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={{ textAlign: "right", paddingRight: 50 }}>
-            ${total}{"\n"}
-            ${discount}{"\n"}
-            ${tax * total}{"\n"}
+          <Text style={{ textAlign: 'right', paddingRight: 50 }}>
+            ${total}{'\n'}
+            ${discount}{'\n'}
+            ${tax * total}{'\n'}
             ${(tax * total + total) - discount}
           </Text>
         </View>
       </View>
     </View>
   );
-}
+};
 
 export default Checkout;
