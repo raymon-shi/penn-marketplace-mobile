@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import {
-  Modal, FormControl, Input, Button,
+  Modal, FormControl, Input, Button, Select,
 } from 'native-base';
 import { StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { data } from './data/index';
 
 const styles = StyleSheet.create({
@@ -30,10 +29,10 @@ const SignUpForm = ({ showSignUp, setShowSignUp }) => {
   const [newPennEmail, setNewPennEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newMonth, setNewMonth] = useState('');
-  const [newDay, setNewDay] = useState(0);
-  const [newYear, setNewYear] = useState(0);
+  const [newDay, setNewDay] = useState('');
+  const [newYear, setNewYear] = useState('');
   const [newSchool, setNewSchool] = useState('');
-  const [newSchoolYear, setNewSchoolYear] = useState(0);
+  const [newSchoolYear, setNewSchoolYear] = useState('');
   return (
     <Modal isOpen={showSignUp} onClose={() => setShowSignUp(false)}>
       <Modal.Content maxWidth="400px">
@@ -54,42 +53,24 @@ const SignUpForm = ({ showSignUp, setShowSignUp }) => {
           </FormControl>
           <FormControl mt="3">
             <FormControl.Label> Birthday</FormControl.Label>
-            <Picker
-              selectedValue={newMonth}
-              onValueChange={(itemValue, itemIndex) => setNewMonth(itemValue)}
-
-            >
-              {data.months.map((month) => <Picker.Item key={month} label={month} value={month} />)}
-            </Picker>
-            <Picker
-              selectedValue={newDay}
-              onValueChange={(itemValue, itemIndex) => setNewDay(itemValue)}
-            >
-              {data.days.map((day) => <Picker.Item key={day} label={day} value={day} />)}
-            </Picker>
-            <Picker
-              selectedValue={newYear}
-              onValueChange={(itemValue, itemIndex) => setNewYear(itemValue)}
-
-            >
-              {data.years.map((year) => <Picker.Item key={year} label={year} value={year} />)}
-            </Picker>
+            <Select placeholder="Month" selectedValue={newMonth} onValueChange={(itemValue) => setNewMonth(itemValue)}>
+              {data.months.map((month) => <Select.Item key={month} label={month} value={month} />)}
+            </Select>
+            <Select placeholder="Day" selectedValue={newDay} onValueChange={(itemValue) => setNewDay(itemValue)}>
+              {data.days.map((day) => <Select.Item key={day} label={day} value={day} />)}
+            </Select>
+            <Select placeholder="Year" selectedValue={newYear} onValueChange={(itemValue) => setNewYear(itemValue)}>
+              {data.years.map((year) => <Select.Item key={year} label={year} value={year} />)}
+            </Select>
           </FormControl>
           <FormControl mt="3">
-            <FormControl.Label> School and Class year</FormControl.Label>
-            <Picker
-              selectedValue={newSchool}
-              onValueChange={(itemValue, itemIndex) => setNewSchool(itemValue)}
-
-            >
-              {data.schools.map((school) => <Picker.Item key={school} label={school} value={school} />)}
-            </Picker>
-            <Picker
-              selectedValue={newSchoolYear}
-              onValueChange={(itemValue, itemIndex) => setNewSchoolYear(itemValue)}
-            >
-              {data.schoolYears.map((schoolYear) => <Picker.Item key={schoolYear} label={schoolYear} value={schoolYear} />)}
-            </Picker>
+            <FormControl.Label> School and Class Year </FormControl.Label>
+            <Select placeholder="School" selectedValue={newSchool} onValueChange={(itemValue) => setNewSchool(itemValue)}>
+              {data.schools.map((school) => <Select.Item key={school} label={school} value={school} />)}
+            </Select>
+            <Select placeholder="Class Year" selectedValue={newSchoolYear} onValueChange={(itemValue) => setNewSchoolYear(itemValue)}>
+              {data.schoolYears.map((schoolYear) => <Select.Item key={schoolYear} label={schoolYear} value={schoolYear} />)}
+            </Select>
           </FormControl>
         </Modal.Body>
         <Modal.Footer>
