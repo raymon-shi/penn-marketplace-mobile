@@ -36,8 +36,24 @@ const Start = ({ setPriceListing, setBidListing }) => (
     </View>
     <Center>
       <View style={styles.buttonGroup}>
-        <Button size="lg" style={styles.button} onPress={() => setPriceListing()} _text={{ color: '#33425B' }} endIcon={<FontAwesome name="tag" />}>List for a set price</Button>
-        <Button size="lg" style={styles.button} onPress={() => setBidListing()} _text={{ color: '#33425B' }} endIcon={<FontAwesome name="gavel" />}>List as a bid</Button>
+        <Button
+          size="lg"
+          style={styles.button}
+          onPress={() => setPriceListing()}
+          _text={{ color: 'black' }}
+          endIcon={<FontAwesome name="tag" />}
+        >
+          List for a set price
+        </Button>
+        <Button
+          size="lg"
+          style={styles.button}
+          onPress={() => setBidListing()}
+          _text={{ color: 'black' }}
+          endIcon={<FontAwesome name="gavel" />}
+        >
+          List as a bid
+        </Button>
       </View>
     </Center>
   </View>

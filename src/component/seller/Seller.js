@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Center, Box } from 'native-base';
+import { View, StyleSheet } from 'react-native';
 
 import Start from './Start';
 import PriceListing from './PriceListing';
@@ -22,32 +21,19 @@ const Seller = () => {
 
   return (
     <View style={styles.container}>
-      {!priceListing && !bidListing && (
-        <Start
-          setPriceListing={() => setPriceListing(true)}
-          setBidListing={() => setBidListing(true)}
-        />
+      {!priceListing && !bidListing && !successPage && (
+        <Start setPriceListing={() => setPriceListing(true)} setBidListing={() => setBidListing(true)} />
       )}
 
       {priceListing && (
-        <PriceListing
-          onSubmit={() => {
-            setPriceListing(false);
-            setSuccessPage(true);
-          }}
-        />
+        <PriceListing onSubmit={() => { setPriceListing(false); setSuccessPage(true); }} onBack={() => setPriceListing(false)} />
       )}
 
       {bidListing && (
-        <BidListing
-          onSubmit={() => {
-            setBidListing(false);
-            setSuccessPage(true);
-          }}
-        />
+        <BidListing onSubmit={() => { setBidListing(false); setSuccessPage(true); }} onBack={() => setBidListing(false)} />
       )}
 
-      {successPage && <Success setSuccessPage={setSuccessPage} />}
+      {successPage && <Success onSubmit={() => setSuccessPage(false)} />}
     </View>
   );
 };

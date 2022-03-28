@@ -1,68 +1,103 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import {
-  Center, Box, Stack, FormControl, Input, Button, Select, TextArea,
+  View, StyleSheet, Image,
+} from 'react-native';
+import {
+  Center, Box, Heading, FormControl, Input, Button, Select, TextArea,
 } from 'native-base';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import * as ImagePicker from 'expo-image-picker';
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'space-between',
+    paddingBottom: '15%',
   },
   formBackground: {
     backgroundColor: 'white',
   },
+  titleColor: {
+    color: '#33425B',
+  },
+  button: {
+    backgroundColor: 'white',
+    borderColor: '#33425B',
+    borderWidth: 2,
+    borderRadius: 30,
+  },
   blueButton: {
+    backgroundColor: '#011F5B',
+  },
+  blueButtonSpace: {
+    marginTop: 5,
     backgroundColor: '#011F5B',
   },
 });
 
-const BidListing = ({ onSubmit }) => {
+const BidListing = ({ onSubmit, onBack }) => {
   const [product, setProduct] = useState('');
   const [productDescr, setProductDescr] = useState('');
-  const [img, setImg] = useState('');
+  const [img, setImg] = useState(null);
   const [tag, setTag] = useState('');
-  const [invalidImgAlert, setInvalidImgAlert] = useState(false);
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      setImg(result.uri);
+    }
+  };
 
   return (
-    <Center>
-      <Box style={styles.formBackground} shadow="5" w="85%" maxW="400px" p="5" alignItems="center">
-        <FormControl mb="5">
+    <Center style={styles.container}>
+      <Heading size="xl" style={styles.titleColor}>Bid Listing</Heading>
+      <Box style={styles.formBackground} rounded="lg" shadow="5" w="85%" maxW="400px" p="5" alignItems="center">
+        <FormControl mb="5" isRequired>
           <FormControl.Label>Product</FormControl.Label>
-          <Input variant="rounded" placeholder="Enter product name" value={product} onChangeText={setProduct} />
+          <Input placeholder="Enter product name" value={product} onChangeText={setProduct} />
         </FormControl>
         <FormControl mb="5">
+          <FormControl.Label>Image</FormControl.Label>
+          <View>
+            <Button
+              size="md"
+              style={styles.button}
+              onPress={pickImage}
+              _text={{ color: '#33425B' }}
+              endIcon={<FontAwesome name="upload" />}
+            >
+              Upload Image
+            </Button>
+            {img && <Image source={{ uri: img }} style={{ width: 50, height: 50 }} />}
+          </View>
+        </FormControl>
+        <FormControl mb="5" isRequired>
           <FormControl.Label>Product Description</FormControl.Label>
-          <Input variant="rounded" placeholder="Provide some details about your product" />
-        </FormControl>
-        <FormControl mb="5">
-          <FormControl.Label>Price</FormControl.Label>
-          <Input variant="rounded" placeholder="Provide some details about your product" />
+          <TextArea h={20} placeholder="Provide some details about your product" value={productDescr} onChangeText={setProductDescr} />
         </FormControl>
         <FormControl mb="5">
           <FormControl.Label>Tag</FormControl.Label>
-          {/* <Select
-            selectedValue={tag}
-            minWidth="200"
-            accessibilityLabel="Select a tag"
-            placeholder="Select a tag"
-            dropdownIcon={<FontAwesome name="chevron-down" />}
-            mt={1}
-            onValueChange={(itemValue) => setTag(itemValue)}
-          >
-            <Select.Item label="Textbooks" value="Textbooks" />
-            <Select.Item label="Services" value="Services" />
-            <Select.Item label="Clothes" value="Clothes" />
-            <Select.Item label="Housing &#38; Furniture" value="Housing &#38; Furniture" />
-          </Select> */}
-          <Select placeholder="Select a tag" selectedValue={tag} onValueChange={(itemValue) => setTag(itemValue)}>
+          <Select placeholder="Select a tag" accessibilityLabel="Select a tag" selectedValue={tag} onValueChange={(itemValue) => setTag(itemValue)}>
             <Select.Item label="Textbooks" value="Textbooks" />
             <Select.Item label="Services" value="Services" />
             <Select.Item label="Clothes" value="Clothes" />
             <Select.Item label="Housing &#38; Furniture" value="Housing &#38; Furniture" />
           </Select>
         </FormControl>
-        <Button size="lg" w="50%" style={styles.blueButton} onPress={() => onSubmit()} _text={{ color: 'white' }}>List as a bid</Button>
+        <Button
+          size="md"
+          w="50%"
+          style={styles.blueButton}
+          onPress={onSubmit}
+          _text={{ color: 'white' }}
+          isDisabled={product === '' || productDescr === ''}
+        >
+          Post
+        </Button>
+        <Button size="md" w="50%" style={styles.blueButtonSpace} onPress={onBack} _text={{ color: 'white' }}>Back</Button>
       </Box>
     </Center>
   );
