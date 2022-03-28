@@ -14,11 +14,11 @@ const App = () => {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Seller">
+        <Stack.Navigator initialRouteName="Home">
           {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
           <Stack.Screen name="Home" component={Login} />
-          <Stack.Screen name="Seller" component={Seller} />
           <Stack.Screen name="Search" component={Search} options={{ headerShown: false }} />
+          <Stack.Screen name="Seller" component={Seller} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
