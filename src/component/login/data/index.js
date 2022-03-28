@@ -13,8 +13,8 @@ export const data = {
     'October',
     'November',
     'December'],
-  days: Array.from({ length: 31 }, (x, i) => i + 1),
-  years: Array.from({ length: 35 }, (x, i) => i + 1990),
+  days: Array.from({ length: 31 }, (x, i) => String(i + 1)),
+  years: Array.from({ length: 35 }, (x, i) => String(i + 1990)),
   schools: [
     'School of Arts and Sciences',
     'The Wharton School',
@@ -28,5 +28,5 @@ export const data = {
     'Perelman School of Medicine',
     'School of Social Policy and Practice',
     'School of Veterinary Medicine'],
-  schoolYears: Array.from({ length: 50 }, (x, i) => i + 1980),
+  schoolYears: Array.from({ length: 50 }, (x, i) => String(i + 1980)),
 };
