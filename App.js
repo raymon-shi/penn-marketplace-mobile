@@ -7,6 +7,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Login from './src/component/login/Login';
 import Search from './src/component/search/Search';
+import Cart from './src/component/cart/Cart';
+import Checkout from './src/component/checkout/Checkout';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -15,8 +17,8 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
-          <Stack.Screen name="Home" component={Login} />
-          <Stack.Screen name="Search" component={Search} options={{ headerShown: false }} />
+          <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen name="Checkout" component={Checkout} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
