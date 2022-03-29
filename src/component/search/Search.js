@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Center, ScrollView } from 'native-base';
+import { Center, ScrollView, View } from 'native-base';
 
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
@@ -10,14 +10,16 @@ const Search = () => {
   const [searchBarText, setSearchBarText] = useState('');
   const [filterType, setFilterType] = useState('');
   return (
-    <ScrollView>
-      <Center style={{ justifyContent: 'space-between' }}>
-        <SearchBar searchBar={searchBarText} setSearchBar={setSearchBarText} filterType={filterType} setFilterType={setFilterType} />
-        <SearchResults />
-        <SearchPagination />
-      </Center>
-      <BottomRow />
-    </ScrollView>
+    <View style={{ flex:1, padding: 60 }}>
+      <ScrollView contentContainerStyle={{alignItems: 'center'}}>
+        <Center style={{ justifyContent: 'space-between' }}>
+          <SearchBar searchBar={searchBarText} setSearchBar={setSearchBarText} filterType={filterType} setFilterType={setFilterType} />
+          <SearchResults />
+          <SearchPagination />
+        </Center>
+        <BottomRow />
+      </ScrollView>
+    </View>
   );
 };
 
