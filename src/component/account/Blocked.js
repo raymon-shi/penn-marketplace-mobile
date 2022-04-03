@@ -3,6 +3,7 @@ import {
   View, Image, Pressable, StyleSheet, Text, FlatList,
 } from 'react-native';
 import UnblockIcon from './assets/Unblock.png';
+import AccountHeader from './AccountHeader';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,6 +64,7 @@ const Blocked = ({ route, navigation }) => {
 
   return (
     <View>
+      <AccountHeader page="Blocked" navigation={navigation} />
       <FlatList
         data={blockedUsers}
         renderItem={blockedUsersList}

@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import GrayStar from './assets/gray-star.png';
 import YellowStar from './assets/yellow-star.png';
+import AccountHeader from './AccountHeader';
 
 const styles = StyleSheet.create({
   listItem: {
@@ -47,6 +48,7 @@ const Reviews = ({ route, navigation }) => {
 
   return (
     <View>
+      <AccountHeader page="Reviews" navigation={navigation} />
       <FlatList
         data={route.params.reviews}
         renderItem={reviewsList}

@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import ReviewIcon from './assets/Review.png';
 import UnfollowIcon from './assets/Unfollow.png';
+import AccountHeader from './AccountHeader';
 
 const styles = StyleSheet.create({
   container: {
@@ -97,6 +98,7 @@ const Follows = ({ route, navigation }) => {
 
   return (
     <View>
+      <AccountHeader page="Follows" navigation={navigation} />
       <View style={styles.container}>
         <Text style={styles.tabText} onPress={() => { setTabOnFollowedUsers(true); }}>Followed</Text>
         <Text style={styles.tabText} onPress={() => { setTabOnFollowedUsers(false); }}>Followers</Text>

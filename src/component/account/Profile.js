@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import ExclamationIcon from './assets/exclamation-mark.png';
 import DarkModeOffIcon from './assets/dark-mode-off.png';
+import AccountHeader from './AccountHeader';
 
 const styles = StyleSheet.create({
   image: {
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
 
 const Profile = ({ route, navigation }) => (
   <View>
+    <AccountHeader page="Profile" navigation={navigation} />
     <View style={{ flexDirection: 'row', margin: '1%' }}>
       <Image style={styles.image} source={ExclamationIcon} />
       <Text style={{ marginLeft: '2%' }}>

@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import NextIcon from './assets/Next.png';
 import user from './assets/testUser.json';
+import AccountHeader from './AccountHeader';
 
 const styles = StyleSheet.create({
   button: {
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
 
 const Account = ({ navigation }) => (
   <View>
+    <AccountHeader page="Account" navigation={navigation} />
     <Pressable style={styles.button} onPress={() => navigation.navigate('Profile', { user: user.user })}>
       <Text style={styles.text}>Profile</Text>
       <Image style={styles.image} source={NextIcon} />
