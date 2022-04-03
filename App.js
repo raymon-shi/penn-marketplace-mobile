@@ -10,14 +10,16 @@ import Seller from './src/component/seller/Seller';
 import Search from './src/component/search/Search';
 import Cart from './src/component/cart/Cart';
 import Checkout from './src/component/checkout/Checkout';
+import Account from './src/component/account/Account';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="Account" screenOptions={{ headerShown: false }}>
           {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
+          <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="Home" component={Login} />
           <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Seller" component={Seller} />
