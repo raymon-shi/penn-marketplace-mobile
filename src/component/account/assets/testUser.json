@@ -1,0 +1,76 @@
+{
+  "user": {
+    "name": "John Doe",
+    "email": "testUser@gmail.com",
+    "pennID": "12345678",
+    "darkMode": false,
+    "reviews": [
+      {
+        "pennID": "11111111",
+        "name": "Reviewer One",
+        "stars": 5,
+        "review": "Very friendly person."
+      },
+      {
+        "pennID": "99999999",
+        "name": "Reviewer Two",
+        "stars": 1,
+        "review": "Scammer."
+      }
+    ],
+    "followers": [
+      {
+        "pennID": "11111111",
+        "name": "Reviewer One"
+      },
+      {
+        "pennID": "22222222",
+        "name": "Sarah McCaucklin"
+      }
+    ],
+    "following": [
+      {
+        "pennID": "11111111",
+        "name": "Reviewer One"
+      },
+      {
+        "pennID": "33333333",
+        "name": "Anita Birds"
+      },
+      {
+        "name": "3",
+        "pennID": "10101010"
+      },
+      {
+        "name": "4",
+        "pennID": "20202020"
+      },
+      {
+        "name": "5",
+        "pennID": "50505050"
+      },
+      {
+        "name": "6",
+        "pennID": "20123233"
+      },
+      {
+        "name": "7",
+        "pennID": "00100100"
+      },
+      {
+        "name": "8",
+        "pennID": "20319929"
+      }
+    ],
+    "blocked": [
+      {
+        "pennID": "99999999",
+        "name": "Reviewer Two"
+      },
+      {
+        "pennID": "44444444",
+        "name": "Raymon Shi"
+      }
+    ]
+  }
+}
