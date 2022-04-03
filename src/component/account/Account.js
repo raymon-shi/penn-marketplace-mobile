@@ -1,63 +1,53 @@
-import React, { useState } from 'react';
-import Profile from './components/Profile';
-import Reviews from './components/Reviews';
-import Follows from './components/Follows';
-import Blocked from './components/Blocked';
+import React from 'react';
+import {
+  View, StyleSheet, Pressable, Text, Image,
+} from 'react-native';
+import NextIcon from './assets/Next.png';
 import user from './assets/testUser.json';
 
-const Account = () => {
-  const [tab, setTab] = useState('Profile');
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: 'none',
+    border: '1px solid black',
+    textAlign: 'left',
+    paddingLeft: '5%',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    flexDirection: 'row',
+  },
+  text: {
+    width: '85%',
+  },
+  image: {
+    width: '12px',
+    height: '12px',
+    resizeMode: 'contain',
+    justifyContent: 'center',
+  },
+});
 
-  function renderTab() {
-    if (tab === 'Profile') {
-      return <Profile userData={user.user} />;
-    }
-    if (tab === 'Reviews') {
-      return <Reviews userData={user.user} />;
-    }
-    if (tab === 'Follows') {
-      return <Follows userData={user.user} />;
-    }
-    return <Blocked userData={user.user} />;
-  }
-
-  function handleClick(e) {
-    let buttons = document.getElementsByClassName('side-nav-button');
-    buttons = [...buttons];
-    for (let i = 0; i < buttons.length; i += 1) {
-      if (buttons[i].innerText === tab) {
-        buttons[i].style = `
-          background-color: none;
-          color: #000000;
-        `;
-        break;
-      }
-    }
-    setTab(e.target.innerText);
-    e.target.style = `
-      background-color: #011F5B;
-      color: #FFFFFF;
-    `;
-  }
-
-  return (
-    <div className="container">
-      <div id="side-nav">
-        <div style={{ width: '40%' }}>
-          <button type="button" className="side-nav-button" onClick={handleClick}>Profile</button>
-          <hr />
-          <button type="button" className="side-nav-button" onClick={handleClick}>Reviews</button>
-          <hr />
-          <button type="button" className="side-nav-button" onClick={handleClick}>Follows</button>
-          <hr />
-          <button type="button" className="side-nav-button" onClick={handleClick}>Blocked</button>
-        </div>
-      </div>
-      <div>
-        {renderTab()}
-      </div>
-    </div>
-  );
-};
+const Account = ({ navigation }) => (
+  <View>
+    <Pressable style={styles.button} onPress={() => navigation.navigate('Profile', { user })}>
+      <Text style={styles.text}>Profile</Text>
+      <Image style={styles.image} source={NextIcon} />
+    </Pressable>
+    <Pressable style={styles.button} onPress={() => navigation.navigate('Reviews', { user })}>
+      <Text style={styles.text}>Reviews</Text>
+      <Image style={styles.image} source={NextIcon} />
+    </Pressable>
+    <Pressable
+      style={styles.button}
+      onPress={() => navigation.navigate('Follows', { followers: user.user.followers, following: user.user.following })}
+    >
+      <Text style={styles.text}>Follows</Text>
+      <Image style={styles.image} source={NextIcon} />
+    </Pressable>
+    <Pressable style={styles.button} onPress={() => navigation.navigate('Blocked', { user })}>
+      <Text style={styles.text}>Blocked</Text>
+      <Image style={styles.image} source={NextIcon} />
+    </Pressable>
+  </View>
+);
 
 export default Account;

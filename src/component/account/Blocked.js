@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import NextIcon from '../assets/Next.png';
-import BackIcon from '../assets/Back.png';
-import UnblockIcon from '../assets/Unblock.png';
+import NextIcon from './assets/Next.png';
+import BackIcon from './assets/Back.png';
+import UnblockIcon from './assets/Unblock.png';
 
 const Blocked = ({ userData }) => {
   const [blockedUsers, setBlockedUsers] = useState(userData.blocked);

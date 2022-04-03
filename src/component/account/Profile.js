@@ -1,6 +1,6 @@
 import React from 'react';
-import ExclamationIcon from '../assets/exclamation-mark.png';
-import DarkModeOffIcone from '../assets/dark-mode-off.png';
+import ExclamationIcon from './assets/exclamation-mark.png';
+import DarkModeOffIcone from './assets/dark-mode-off.png';
 
 const Profile = (userData) => (
   <div style={{ width: '100%' }}>

@@ -1,6 +1,6 @@
 import React from 'react';
-import GrayStar from '../assets/gray-star.png';
-import YellowStar from '../assets/yellow-star.png';
+import GrayStar from './assets/gray-star.png';
+import YellowStar from './assets/yellow-star.png';
 
 const Reviews = ({ userData }) => {
   function generateRatingComponent(numStars) {

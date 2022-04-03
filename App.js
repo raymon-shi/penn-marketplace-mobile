@@ -11,6 +11,10 @@ import Search from './src/component/search/Search';
 import Cart from './src/component/cart/Cart';
 import Checkout from './src/component/checkout/Checkout';
 import Account from './src/component/account/Account';
+import Profile from './src/component/account/Profile';
+import Reviews from './src/component/account/Reviews';
+import Follows from './src/component/account/Follows';
+import Blocked from './src/component/account/Blocked';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -19,6 +23,10 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Account" screenOptions={{ headerShown: false }}>
           {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Reviews" component={Reviews} />
+          <Stack.Screen name="Follows" component={Follows} />
+          <Stack.Screen name="Blocked" component={Blocked} />
           <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="Home" component={Login} />
           <Stack.Screen name="Search" component={Search} />
