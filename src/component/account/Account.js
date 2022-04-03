@@ -32,7 +32,7 @@ const Account = ({ navigation }) => (
       <Text style={styles.text}>Profile</Text>
       <Image style={styles.image} source={NextIcon} />
     </Pressable>
-    <Pressable style={styles.button} onPress={() => navigation.navigate('Reviews', { user })}>
+    <Pressable style={styles.button} onPress={() => navigation.navigate('Reviews', { reviews: user.user.reviews })}>
       <Text style={styles.text}>Reviews</Text>
       <Image style={styles.image} source={NextIcon} />
     </Pressable>

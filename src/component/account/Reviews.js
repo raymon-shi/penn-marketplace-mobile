@@ -1,42 +1,58 @@
 import React from 'react';
+import {
+  View, Text, Image, FlatList, StyleSheet,
+} from 'react-native';
 import GrayStar from './assets/gray-star.png';
 import YellowStar from './assets/yellow-star.png';
 
-const Reviews = ({ userData }) => {
+const styles = StyleSheet.create({
+  listItem: {
+    border: '1px black solid',
+    margin: '1%',
+  },
+  image: {
+    width: '12px',
+    height: '12px',
+    resizeMode: 'contain',
+    justifyContent: 'center',
+  },
+});
+
+const Reviews = ({ route, navigation }) => {
   function generateRatingComponent(numStars) {
-    const stars = Array(5).fill(<img src={GrayStar} alt="Yellow star." />);
+    const stars = Array(5).fill(<Image source={GrayStar} style={styles.image} />);
     for (let i = 0; i < numStars; i += 1) {
-      stars[i] = (<img src={YellowStar} alt="Yellow star." />);
+      stars[i] = (<Image source={YellowStar} style={styles.image} />);
     }
     return stars;
   }
 
+  const reviewsList = (review) => (
+    <View style={styles.listItem}>
+      <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row' }}>
+          {generateRatingComponent(review.item.stars)}
+        </View>
+        <Text style={{ marginLeft: '1%' }}>
+          {review.item.name}
+        </Text>
+      </View>
+      <View>
+        <Text>
+          {review.item.review}
+        </Text>
+      </View>
+    </View>
+  );
+
   return (
-    <div>
-      <div style={{ width: '100%' }}>
-        <h1>Reviews</h1>
-      </div>
-      <div id="reviews">
-        <div style={{ padding: '1% 2%' }}>
-          {userData.reviews.map((review) => (
-            <div className="review" key={review.pennID}>
-              <div style={{ margin: '1%' }}>
-                <div className="flex">
-                  <div className="rating">
-                    {generateRatingComponent(review.stars)}
-                  </div>
-                  &nbsp;
-                  {review.name}
-                </div>
-                <div>
-                  {review.review}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <View>
+      <FlatList
+        data={route.params.reviews}
+        renderItem={reviewsList}
+        keyExtractor={(item) => item.pennID}
+      />
+    </View>
   );
 };
 

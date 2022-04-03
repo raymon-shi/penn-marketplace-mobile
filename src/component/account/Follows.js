@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, FlatList, Image, Pressable,
 } from 'react-native';
-import BackIcon from './assets/Back.png';
 import ReviewIcon from './assets/Review.png';
 import UnfollowIcon from './assets/Unfollow.png';
 

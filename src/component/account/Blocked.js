@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import {
   View, Image, Pressable, StyleSheet, Text, FlatList,
 } from 'react-native';
-import NextIcon from './assets/Next.png';
-import BackIcon from './assets/Back.png';
 import UnblockIcon from './assets/Unblock.png';
 
 const styles = StyleSheet.create({
@@ -36,19 +34,6 @@ const styles = StyleSheet.create({
 
 const Blocked = ({ route, navigation }) => {
   const [blockedUsers, setBlockedUsers] = useState(route.params.blocked);
-
-  function handleUnblock(e) {
-    // Insert API call here
-    let indexToDelete;
-    if (e.target.tagName === 'IMG') {
-      indexToDelete = e.target.parentNode.value;
-    } else {
-      indexToDelete = e.target.value;
-    }
-    const newBlockedUsers = [...blockedUsers];
-    newBlockedUsers.splice(indexToDelete, 1);
-    setBlockedUsers(newBlockedUsers);
-  }
 
   const blockedUsersList = (blockedUser) => (
     <View style={styles.listItem}>
