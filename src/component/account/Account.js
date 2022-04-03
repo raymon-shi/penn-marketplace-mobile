@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'none',
     border: '1px solid black',
-    textAlign: 'left',
     paddingLeft: '5%',
     paddingTop: '8px',
     paddingBottom: '8px',
@@ -28,7 +27,7 @@ const styles = StyleSheet.create({
 
 const Account = ({ navigation }) => (
   <View>
-    <Pressable style={styles.button} onPress={() => navigation.navigate('Profile', { user })}>
+    <Pressable style={styles.button} onPress={() => navigation.navigate('Profile', { user: user.user })}>
       <Text style={styles.text}>Profile</Text>
       <Image style={styles.image} source={NextIcon} />
     </Pressable>
