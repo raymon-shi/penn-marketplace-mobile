@@ -1,24 +1,41 @@
 import React, { useState } from 'react';
+import {
+  View, Image, Pressable, StyleSheet, Text, FlatList,
+} from 'react-native';
 import NextIcon from './assets/Next.png';
 import BackIcon from './assets/Back.png';
 import UnblockIcon from './assets/Unblock.png';
 
-const Blocked = ({ userData }) => {
-  const [blockedUsers, setBlockedUsers] = useState(userData.blocked);
-  const [blockedUsersPage, setBlockedUsersPage] = useState(1);
-  const blockedUsersItems = blockedUsers.slice((blockedUsersPage - 1) * 10, blockedUsersPage * 10);
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+  },
+  tabText: {
+    width: '50%',
+    textAlign: 'center',
+    border: '2px black solid',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+  },
+  listItem: {
+    flexDirection: 'row',
+    border: '1px black solid',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+  },
+  name: {
+    width: '80%',
+  },
+  image: {
+    width: '12px',
+    height: '12px',
+    resizeMode: 'contain',
+    justifyContent: 'center',
+  },
+});
 
-  function prevBlockedUsersPage() {
-    if (blockedUsersPage > 1) {
-      setBlockedUsersPage(blockedUsersPage - 1);
-    }
-  }
-
-  function nextBlockedUsersPage() {
-    if (blockedUsersPage * 10 < blockedUsers.length) {
-      setBlockedUsersPage(blockedUsersPage + 1);
-    }
-  }
+const Blocked = ({ route, navigation }) => {
+  const [blockedUsers, setBlockedUsers] = useState(route.params.blocked);
 
   function handleUnblock(e) {
     // Insert API call here
@@ -31,59 +48,42 @@ const Blocked = ({ userData }) => {
     const newBlockedUsers = [...blockedUsers];
     newBlockedUsers.splice(indexToDelete, 1);
     setBlockedUsers(newBlockedUsers);
-    if (newBlockedUsers.length < blockedUsersPage * 10 - 9 && blockedUsersPage > 1) {
-      setBlockedUsersPage(blockedUsersPage - 1);
-    }
   }
 
+  const blockedUsersList = (blockedUser) => (
+    <View style={styles.listItem}>
+      <Text style={styles.name}>
+        {blockedUser.item.name}
+      </Text>
+      <View style={{ width: '20%' }}>
+        <Pressable
+          onPress={() => {
+            let indexToDelete;
+            for (let i = 0; i < blockedUsers.length; i += 1) {
+              if (blockedUsers[i].pennID === blockedUser.item.pennID) {
+                indexToDelete = i;
+                break;
+              }
+            }
+            const newBlockedUsers = [...blockedUsers];
+            newBlockedUsers.splice(indexToDelete, 1);
+            setBlockedUsers(newBlockedUsers);
+          }}
+        >
+          <Image style={styles.image} source={UnblockIcon} />
+        </Pressable>
+      </View>
+    </View>
+  );
+
   return (
-    <div style={{ width: '100%' }}>
-      <div>
-        <div className="flex">
-          <h1>Blocked</h1>
-          <div className="flex pagination-bar">
-            <button type="button" onClick={prevBlockedUsersPage}>
-              <img src={BackIcon} alt="Back Arrow Icon" />
-            </button>
-            &nbsp;{(blockedUsersPage - 1) * 10 + 1} -&nbsp;
-            {blockedUsersPage * 10 > blockedUsers.length
-              ? blockedUsers.length : blockedUsersPage * 10}&nbsp;
-            of {blockedUsers.length}&nbsp;
-            <button type="button" onClick={nextBlockedUsersPage}>
-              <img src={NextIcon} alt="Next Arrow Icon" />
-            </button>
-          </div>
-        </div>
-        <div className="box">
-          <div style={{ padding: '1% 2%' }}>
-            <div className="table-row">
-              <br />
-              <div>
-                <br />
-              </div>
-              <div className="table-item">
-                Unblock
-              </div>
-            </div>
-            {blockedUsersItems.map((blockedUser, index) => (
-              <div key={blockedUser.pennID} className="table-row">
-                <p>
-                  {blockedUser.name}
-                </p>
-                <div>
-                  <br />
-                </div>
-                <div className="table-item">
-                  <button type="button" onClick={handleUnblock} value={index}>
-                    <img src={UnblockIcon} alt="Unblock Icon" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+    <View>
+      <FlatList
+        data={blockedUsers}
+        renderItem={blockedUsersList}
+        keyExtractor={(item) => item.pennID}
+      />
+    </View>
   );
 };
 

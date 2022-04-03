@@ -43,7 +43,7 @@ const Account = ({ navigation }) => (
       <Text style={styles.text}>Follows</Text>
       <Image style={styles.image} source={NextIcon} />
     </Pressable>
-    <Pressable style={styles.button} onPress={() => navigation.navigate('Blocked', { user })}>
+    <Pressable style={styles.button} onPress={() => navigation.navigate('Blocked', { blocked: user.user.blocked })}>
       <Text style={styles.text}>Blocked</Text>
       <Image style={styles.image} source={NextIcon} />
     </Pressable>
