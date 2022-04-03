@@ -8,13 +8,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './src/component/login/Login';
 import Seller from './src/component/seller/Seller';
 import Search from './src/component/search/Search';
-import Cart from './src/component/cart/Cart';
-import Checkout from './src/component/checkout/Checkout';
+import Cart from './src/component/buyer/cart/Cart';
+import Checkout from './src/component/buyer/checkout/Checkout';
 import Account from './src/component/account/Account';
 import Profile from './src/component/account/Profile';
 import Reviews from './src/component/account/Reviews';
 import Follows from './src/component/account/Follows';
 import Blocked from './src/component/account/Blocked';
+import Item from './src/component/buyer/item/Item';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -33,6 +34,7 @@ const App = () => {
           <Stack.Screen name="Seller" component={Seller} />
           <Stack.Screen name="Cart" component={Cart} />
           <Stack.Screen name="Checkout" component={Checkout} />
+          <Stack.Screen name="Item" component={Item} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
