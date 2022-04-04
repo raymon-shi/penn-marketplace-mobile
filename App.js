@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { NativeBaseProvider, HStack } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
@@ -22,9 +22,11 @@ import BottomRow from './src/component/search/BottomRow';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
+  const navigationRef = React.createRef();
+
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
@@ -46,8 +48,8 @@ const App = () => {
           <Stack.Screen name="Checkout" component={Checkout} />
           <Stack.Screen name="Item" component={Item} />
         </Stack.Navigator>
+        <BottomRow navigationRef={navigationRef} />
       </NavigationContainer>
-      {/* <BottomRow /> */}
     </NativeBaseProvider>
   );
 };
