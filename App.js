@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider, HStack } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,20 +16,25 @@ import Reviews from './src/component/account/Reviews';
 import Follows from './src/component/account/Follows';
 import Blocked from './src/component/account/Blocked';
 import Item from './src/component/buyer/item/Item';
+import Home from './src/component/homepage/Home';
+import Header from './src/component/homepage/Header';
+import BottomRow from './src/component/search/BottomRow';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NativeBaseProvider>
+      <Header />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Account" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
           {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="Reviews" component={Reviews} />
           <Stack.Screen name="Follows" component={Follows} />
           <Stack.Screen name="Blocked" component={Blocked} />
           <Stack.Screen name="Account" component={Account} />
-          <Stack.Screen name="Home" component={Login} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Seller" component={Seller} />
           <Stack.Screen name="Cart" component={Cart} />
@@ -37,6 +42,7 @@ const App = () => {
           <Stack.Screen name="Item" component={Item} />
         </Stack.Navigator>
       </NavigationContainer>
+      <BottomRow />
     </NativeBaseProvider>
   );
 };

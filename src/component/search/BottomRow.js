@@ -1,6 +1,10 @@
 import React from 'react';
-import { Button, HStack } from 'native-base';
+import {
+  View, Icon, Button, HStack,
+} from 'native-base';
 import { StyleSheet } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,22 +16,27 @@ const styles = StyleSheet.create({
   blueButton: {
     backgroundColor: '#011F5B',
   },
+  button: {
+    backgroundColor: 'white',
+  },
   footer: {
     width: '100%',
-    height: 50,
+    height: 80,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    bottom: 0,
+    textAlign: 'center',
+  },
+  icon: {
+    textAlign: 'center',
   },
 });
 
 const BottomRow = () => (
   <HStack space={3} justifyContent="center" background="black" style={styles.footer}>
-    <Button style={styles.blueButton}>Profile</Button>
-    <Button style={styles.blueButton}>Shopping Cart</Button>
-    <Button style={styles.blueButton}>+</Button>
+    <Button style={styles.button}><Icon as={FontAwesome} style={styles.icon} name="user" size="8" /></Button>
+    <Button style={styles.button}><Icon as={FontAwesome} style={styles.icon} name="shopping-cart" size="8" /></Button>
+    <Button style={styles.button}><Icon as={FontAwesome} style={styles.icon} name="plus" size="8" /></Button>
   </HStack>
 );
 
