@@ -8,7 +8,7 @@ import BackIcon from './assets/Back.png';
 const styles = StyleSheet.create({
   homeBtn: {
     backgroundColor: '#990000',
-    borderRadius: '10%',
+    borderRadius: 5,
     width: '20%',
     justifyContent: 'center',
     textAlign: 'center',
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     margin: '2%',
   },
   image: {
-    width: '12px',
-    height: '12px',
+    width: 12,
+    height: 12,
     resizeMode: 'contain',
     marginLeft: '2%',
   },

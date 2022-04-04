@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, FlatList, Image, Pressable,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import ReviewIcon from './assets/Review.png';
 import UnfollowIcon from './assets/Unfollow.png';
 import AccountHeader from './AccountHeader';
@@ -13,22 +14,24 @@ const styles = StyleSheet.create({
   tabText: {
     width: '50%',
     textAlign: 'center',
-    border: '2px black solid',
-    paddingTop: '5px',
-    paddingBottom: '5px',
+    borderColor: 'black',
+    borderWidth: 2,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   listItem: {
     flexDirection: 'row',
-    border: '1px black solid',
-    paddingTop: '5px',
-    paddingBottom: '5px',
+    borderColor: 'black',
+    borderWidth: 1,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   name: {
     width: '80%',
   },
   image: {
-    width: '12px',
-    height: '12px',
+    width: 12,
+    height: 12,
     resizeMode: 'contain',
     justifyContent: 'center',
   },
@@ -97,7 +100,7 @@ const Follows = ({ route, navigation }) => {
   );
 
   return (
-    <View>
+    <SafeAreaView>
       <AccountHeader page="Follows" navigation={navigation} />
       <View style={styles.container}>
         <Text style={styles.tabText} onPress={() => { setTabOnFollowedUsers(true); }}>Followed</Text>
@@ -108,7 +111,7 @@ const Follows = ({ route, navigation }) => {
         renderItem={tabOnFollowedUsers ? followedUsersList : followersList}
         keyExtractor={(item) => item.pennID}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
