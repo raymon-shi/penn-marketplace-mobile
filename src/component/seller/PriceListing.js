@@ -11,7 +11,7 @@ import NumericInput from '@wwdrew/react-native-numeric-textinput';
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: '5%',
+    paddingBottom: '2%',
   },
   formBackground: {
     backgroundColor: 'white',
@@ -66,11 +66,11 @@ const PriceListing = ({ onSubmit, onBack }) => {
     <Center style={styles.container}>
       <Heading size="xl" style={styles.titleColor}>Sale Listing</Heading>
       <Box style={styles.formBackground} rounded="lg" shadow="5" w="85%" maxW="400px" p="5" alignItems="center">
-        <FormControl mb="5" isRequired>
+        <FormControl mb="2" isRequired>
           <FormControl.Label>Product</FormControl.Label>
           <Input placeholder="Enter product name" value={product} onChangeText={setProduct} />
         </FormControl>
-        <FormControl mb="5">
+        <FormControl mb="2">
           <FormControl.Label>Image</FormControl.Label>
           <View>
             <Button
@@ -85,11 +85,11 @@ const PriceListing = ({ onSubmit, onBack }) => {
             {img && <Image source={{ uri: img }} style={{ width: 50, height: 50 }} />}
           </View>
         </FormControl>
-        <FormControl mb="5" isRequired>
+        <FormControl mb="2" isRequired>
           <FormControl.Label>Product Description</FormControl.Label>
           <TextArea placeholder="Provide some details about your product" value={productDescr} onChangeText={setProductDescr} />
         </FormControl>
-        <FormControl mb="5" isRequired>
+        <FormControl mb="2" isRequired>
           <FormControl.Label>Price</FormControl.Label>
           <NumericInput
             placeholder="Set a price"
@@ -100,7 +100,7 @@ const PriceListing = ({ onSubmit, onBack }) => {
             onUpdate={(value) => setPrice(value)}
           />
         </FormControl>
-        <FormControl mb="5">
+        <FormControl mb="2">
           <FormControl.Label>Tag</FormControl.Label>
           <Select placeholder="Select a tag" accessibilityLabel="Select a tag" selectedValue={tag} onValueChange={(itemValue) => setTag(itemValue)}>
             <Select.Item label="Textbooks" value="Textbooks" />

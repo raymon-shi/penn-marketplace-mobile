@@ -1,18 +1,19 @@
 import React from 'react';
 import {
-  View, StyleSheet, Text, Dimensions, Image,
+  View, StyleSheet, Text, Image,
 } from 'react-native';
 import { Heading } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
 
 import { v4 as uuidv4 } from 'uuid';
 import items from './assets/productimages.json';
-import beanbag from './assets/beanbag.jpg'
+import beanbag from './assets/beanbag.jpg';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   carouselWrapper: {
     height: 150,
@@ -37,12 +38,10 @@ const styles = StyleSheet.create({
   },
   titleColor: {
     marginTop: 10,
-    paddingLeft: 5,
+    paddingLeft: 12,
     color: '#33425B',
   },
 });
-
-const windowWidth = Dimensions.get('window').width;
 
 const renderItem = ({ item }) => (
   <View style={styles.carouselSlide}>
@@ -62,7 +61,7 @@ const Home = () => (
         <Carousel
           data={items}
           renderItem={renderItem}
-          sliderWidth={windowWidth}
+          sliderWidth={400}
           itemWidth={150}
           enableMomentum={false}
           lockScrollWhileSnapping
@@ -80,7 +79,7 @@ const Home = () => (
         <Carousel
           data={items}
           renderItem={renderItem}
-          sliderWidth={windowWidth}
+          sliderWidth={400}
           itemWidth={150}
           enableMomentum={false}
           lockScrollWhileSnapping
@@ -98,7 +97,7 @@ const Home = () => (
         <Carousel
           data={items}
           renderItem={renderItem}
-          sliderWidth={windowWidth}
+          sliderWidth={400}
           itemWidth={150}
           enableMomentum={false}
           lockScrollWhileSnapping

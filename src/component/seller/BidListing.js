@@ -10,7 +10,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: '15%',
+    paddingBottom: '5%',
   },
   formBackground: {
     backgroundColor: 'white',
@@ -55,11 +55,11 @@ const BidListing = ({ onSubmit, onBack }) => {
     <Center style={styles.container}>
       <Heading size="xl" style={styles.titleColor}>Bid Listing</Heading>
       <Box style={styles.formBackground} rounded="lg" shadow="5" w="85%" maxW="400px" p="5" alignItems="center">
-        <FormControl mb="5" isRequired>
+        <FormControl mb="2" isRequired>
           <FormControl.Label>Product</FormControl.Label>
           <Input placeholder="Enter product name" value={product} onChangeText={setProduct} />
         </FormControl>
-        <FormControl mb="5">
+        <FormControl mb="2">
           <FormControl.Label>Image</FormControl.Label>
           <View>
             <Button
@@ -74,11 +74,11 @@ const BidListing = ({ onSubmit, onBack }) => {
             {img && <Image source={{ uri: img }} style={{ width: 50, height: 50 }} />}
           </View>
         </FormControl>
-        <FormControl mb="5" isRequired>
+        <FormControl mb="2" isRequired>
           <FormControl.Label>Product Description</FormControl.Label>
           <TextArea h={20} placeholder="Provide some details about your product" value={productDescr} onChangeText={setProductDescr} />
         </FormControl>
-        <FormControl mb="5">
+        <FormControl mb="2">
           <FormControl.Label>Tag</FormControl.Label>
           <Select placeholder="Select a tag" accessibilityLabel="Select a tag" selectedValue={tag} onValueChange={(itemValue) => setTag(itemValue)}>
             <Select.Item label="Textbooks" value="Textbooks" />
