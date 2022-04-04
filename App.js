@@ -24,9 +24,14 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NativeBaseProvider>
-      <Header />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            // eslint-disable-next-line react/no-unstable-nested-components
+            header: ({ navigation }) => <Header />,
+          }}
+        >
           {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="Reviews" component={Reviews} />
@@ -42,7 +47,7 @@ const App = () => {
           <Stack.Screen name="Item" component={Item} />
         </Stack.Navigator>
       </NavigationContainer>
-      <BottomRow />
+      {/* <BottomRow /> */}
     </NativeBaseProvider>
   );
 };

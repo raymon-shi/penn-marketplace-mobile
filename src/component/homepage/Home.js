@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, StyleSheet, Text, Dimensions, Image
+  View, StyleSheet, Text, Dimensions, Image,
 } from 'react-native';
 import { Heading } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
@@ -54,67 +54,62 @@ const renderItem = ({ item }) => (
   </View>
 );
 
-const Home = () => {
-  const x = 1;
-
-  return (
-    <View style={styles.container}>
-      <View>
-        <Heading size="lg" style={styles.titleColor}>Trending Listings</Heading>
-        <View style={styles.carouselWrapper}>
-          <Carousel
-            data={items}
-            renderItem={renderItem}
-            sliderWidth={windowWidth}
-            itemWidth={150}
-            enableMomentum={false}
-            lockScrollWhileSnapping
-            autoplay
-            useScrollView
-            loop
-            autoplayInterval={5000}
-          />
-        </View>
+const Home = () => (
+  <View style={styles.container}>
+    <View>
+      <Heading size="lg" style={styles.titleColor}>Trending Listings</Heading>
+      <View style={styles.carouselWrapper}>
+        <Carousel
+          data={items}
+          renderItem={renderItem}
+          sliderWidth={windowWidth}
+          itemWidth={150}
+          enableMomentum={false}
+          lockScrollWhileSnapping
+          autoplay
+          useScrollView
+          loop
+          autoplayInterval={5000}
+        />
       </View>
-
-      <View>
-        <Heading size="lg" style={styles.titleColor}>Saved Listings</Heading>
-        <View style={styles.carouselWrapper}>
-          <Carousel
-            data={items}
-            renderItem={renderItem}
-            sliderWidth={windowWidth}
-            itemWidth={150}
-            enableMomentum={false}
-            lockScrollWhileSnapping
-            autoplay
-            useScrollView
-            loop
-            autoplayInterval={5000}
-          />
-        </View>
-      </View>
-
-      <View>
-        <Heading size="lg" style={styles.titleColor}>Today&apos;s listings</Heading>
-        <View style={styles.carouselWrapper}>
-          <Carousel
-            data={items}
-            renderItem={renderItem}
-            sliderWidth={windowWidth}
-            itemWidth={150}
-            enableMomentum={false}
-            lockScrollWhileSnapping
-            autoplay
-            useScrollView
-            loop
-            autoplayInterval={5000}
-          />
-        </View>
-      </View>
-
     </View>
-  );
-};
+
+    <View>
+      <Heading size="lg" style={styles.titleColor}>Saved Listings</Heading>
+      <View style={styles.carouselWrapper}>
+        <Carousel
+          data={items}
+          renderItem={renderItem}
+          sliderWidth={windowWidth}
+          itemWidth={150}
+          enableMomentum={false}
+          lockScrollWhileSnapping
+          autoplay
+          useScrollView
+          loop
+          autoplayInterval={5000}
+        />
+      </View>
+    </View>
+
+    <View>
+      <Heading size="lg" style={styles.titleColor}>Today&apos;s listings</Heading>
+      <View style={styles.carouselWrapper}>
+        <Carousel
+          data={items}
+          renderItem={renderItem}
+          sliderWidth={windowWidth}
+          itemWidth={150}
+          enableMomentum={false}
+          lockScrollWhileSnapping
+          autoplay
+          useScrollView
+          loop
+          autoplayInterval={5000}
+        />
+      </View>
+    </View>
+  </View>
+);
 
 export default Home;
