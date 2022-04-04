@@ -1,33 +1,35 @@
 import React from 'react';
 import {
-  View, StyleSheet, Pressable, Text, Image,
+  StyleSheet, Pressable, Text, Image,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import NextIcon from './assets/Next.png';
 import user from './assets/testUser.json';
 import AccountHeader from './AccountHeader';
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'none',
-    border: '1px solid black',
+    backgroundColor: '#e5e5e5',
+    borderColor: 'black',
+    borderWidth: 1,
     paddingLeft: '5%',
-    paddingTop: '8px',
-    paddingBottom: '8px',
+    paddingTop: 8,
+    paddingBottom: 8,
     flexDirection: 'row',
   },
   text: {
     width: '85%',
   },
   image: {
-    width: '12px',
-    height: '12px',
+    width: 12,
+    height: 12,
     resizeMode: 'contain',
     justifyContent: 'center',
   },
 });
 
 const Account = ({ navigation }) => (
-  <View>
+  <SafeAreaView>
     <AccountHeader page="Account" navigation={navigation} />
     <Pressable style={styles.button} onPress={() => navigation.navigate('Profile', { user: user.user })}>
       <Text style={styles.text}>Profile</Text>
@@ -48,7 +50,7 @@ const Account = ({ navigation }) => (
       <Text style={styles.text}>Blocked</Text>
       <Image style={styles.image} source={NextIcon} />
     </Pressable>
-  </View>
+  </SafeAreaView>
 );
 
 export default Account;

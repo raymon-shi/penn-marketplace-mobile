@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   View, Image, Pressable, StyleSheet, Text, FlatList,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import UnblockIcon from './assets/Unblock.png';
 import AccountHeader from './AccountHeader';
 
@@ -12,22 +13,24 @@ const styles = StyleSheet.create({
   tabText: {
     width: '50%',
     textAlign: 'center',
-    border: '2px black solid',
-    paddingTop: '5px',
-    paddingBottom: '5px',
+    borderColor: 'black',
+    borderWidth: 2,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   listItem: {
     flexDirection: 'row',
-    border: '1px black solid',
-    paddingTop: '5px',
-    paddingBottom: '5px',
+    borderColor: 'black',
+    borderWidth: 1,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   name: {
     width: '80%',
   },
   image: {
-    width: '12px',
-    height: '12px',
+    width: 12,
+    height: 12,
     resizeMode: 'contain',
     justifyContent: 'center',
   },
@@ -63,14 +66,14 @@ const Blocked = ({ route, navigation }) => {
   );
 
   return (
-    <View>
+    <SafeAreaView>
       <AccountHeader page="Blocked" navigation={navigation} />
       <FlatList
         data={blockedUsers}
         renderItem={blockedUsersList}
         keyExtractor={(item) => item.pennID}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

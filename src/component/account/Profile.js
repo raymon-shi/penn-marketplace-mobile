@@ -2,31 +2,33 @@ import React from 'react';
 import {
   View, Text, Image, Pressable, StyleSheet,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import ExclamationIcon from './assets/exclamation-mark.png';
 import DarkModeOffIcon from './assets/dark-mode-off.png';
 import AccountHeader from './AccountHeader';
 
 const styles = StyleSheet.create({
   image: {
-    width: '12px',
-    height: '12px',
+    width: 12,
+    height: 12,
     resizeMode: 'contain',
     justifyContent: 'center',
   },
   profileBox: {
-    border: '1px black solid',
+    borderColor: 'black',
+    borderWidth: 1,
     margin: '1%',
   },
   editBtn: {
-    backgroundColor: '#011F5B',
-    borderRadius: '10%',
+    backgroundColor: '#011f5b',
+    borderRadius: 5,
     flexDirection: 'row',
     justifyContent: 'center',
   },
 });
 
 const Profile = ({ route, navigation }) => (
-  <View>
+  <SafeAreaView>
     <AccountHeader page="Profile" navigation={navigation} />
     <View style={{ flexDirection: 'row', margin: '1%' }}>
       <Image style={styles.image} source={ExclamationIcon} />
@@ -59,7 +61,7 @@ const Profile = ({ route, navigation }) => (
         </Text>
       </Pressable>
     </View>
-  </View>
+  </SafeAreaView>
 );
 
 export default Profile;
