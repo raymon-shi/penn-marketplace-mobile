@@ -2,18 +2,20 @@ import React from 'react';
 import {
   View, Text, Image, FlatList, StyleSheet,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import GrayStar from './assets/gray-star.png';
 import YellowStar from './assets/yellow-star.png';
 import AccountHeader from './AccountHeader';
 
 const styles = StyleSheet.create({
   listItem: {
-    border: '1px black solid',
+    borderColor: 'black',
+    borderWidth: 1,
     margin: '1%',
   },
   image: {
-    width: '12px',
-    height: '12px',
+    width: 12,
+    height: 12,
     resizeMode: 'contain',
     justifyContent: 'center',
   },
@@ -47,14 +49,14 @@ const Reviews = ({ route, navigation }) => {
   );
 
   return (
-    <View>
+    <SafeAreaView>
       <AccountHeader page="Reviews" navigation={navigation} />
       <FlatList
         data={route.params.reviews}
         renderItem={reviewsList}
         keyExtractor={(item) => item.pennID}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
