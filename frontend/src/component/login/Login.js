@@ -17,7 +17,7 @@ const Login = ({ navigation }) => {
   return (
     <Box style={styles.container}>
       <Title />
-      <LoginForm />
+      <LoginForm navigation={navigation} />
       <Button onPress={() => navigation.navigate('Search')}>
         Search
       </Button>

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon, Button, HStack, Menu, Pressable } from 'native-base';
 import { StyleSheet } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,8 +39,38 @@ const styles = StyleSheet.create({
   },
 });
 
+const serverURL = 'http://localhost:8081';
+
 const BottomRow = ({ navigationRef }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [refresh, setRefresh] = useState(0);
+
+  const getLoginData = async () => {
+    try {
+      const emailValue = await AsyncStorage.getItem('email');
+      setEmail(emailValue);
+      if (emailValue) {
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const setLoggedOutData = async () => {
+    try {
+      await AsyncStorage.setItem('email', '');
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getLoginData();
+  }, [refresh]);
 
   const render = () => {
     if (isLoggedIn) {
@@ -61,7 +93,13 @@ const BottomRow = ({ navigationRef }) => {
             <Menu.Item onPress={() => navigationRef.current?.navigate('Seller')}>Sell</Menu.Item>
             <Menu.Item onPress={() => navigationRef.current?.navigate('Item')}>Item</Menu.Item>
             <Menu.Item onPress={() => navigationRef.current?.navigate('Home')}>Home</Menu.Item>
-            <Menu.Item onPress={() => navigationRef.current?.navigate('Login')}>Logout</Menu.Item>
+            <Menu.Item
+              onPress={() => {
+                setLoggedOutData();
+                navigationRef.current?.navigate('Login');
+              }}>
+              Logout
+            </Menu.Item>
             <Menu.Item isDisabled>Placeholder</Menu.Item>
           </Menu>
         </HStack>
@@ -74,6 +112,9 @@ const BottomRow = ({ navigationRef }) => {
         </Button>
         <Button style={styles.blueButton} onPress={() => navigationRef.current?.navigate('Login')}>
           Sign Up
+        </Button>
+        <Button style={styles.blueButton} onPress={() => setRefresh(refresh + 1)}>
+          Refresh
         </Button>
       </HStack>
     );
