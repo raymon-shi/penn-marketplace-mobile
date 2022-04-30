@@ -40,5 +40,6 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-native": "^4.0.0"
   },
-  "private": true
+  "private": true,
+  "proxy": "http://localhost:8080"
 }

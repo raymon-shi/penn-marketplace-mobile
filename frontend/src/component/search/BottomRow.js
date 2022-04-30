@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 });
 
 const BottomRow = ({ navigationRef }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const render = () => {
     if (isLoggedIn) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, StyleSheet, Text, Image,
+  SafeAreaView, View, StyleSheet, Text, Image, ScrollView,
 } from 'react-native';
 import { Heading } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
@@ -54,61 +54,66 @@ const renderItem = ({ item }) => (
 );
 
 const Home = () => (
-  <View style={styles.container}>
-    <View>
-      <Heading size="lg" style={styles.titleColor}>Trending Listings</Heading>
-      <View style={styles.carouselWrapper}>
-        <Carousel
-          data={items}
-          renderItem={renderItem}
-          sliderWidth={400}
-          itemWidth={150}
-          enableMomentum={false}
-          lockScrollWhileSnapping
-          autoplay
-          useScrollView
-          loop
-          autoplayInterval={5000}
-        />
+  <SafeAreaView style={styles.container}>
+    <ScrollView>
+      <View>
+        <Heading size="lg" style={styles.titleColor}>Trending Listings</Heading>
+        <View style={styles.carouselWrapper}>
+          <Carousel
+            data={items}
+            renderItem={renderItem}
+            sliderWidth={400}
+            itemWidth={150}
+            enableMomentum={false}
+            lockScrollWhileSnapping
+            autoplay
+            useScrollView
+            loop
+            autoplayInterval={5000}
+            keyExtractor={() => uuidv4()}
+          />
+        </View>
       </View>
-    </View>
 
-    <View>
-      <Heading size="lg" style={styles.titleColor}>Saved Listings</Heading>
-      <View style={styles.carouselWrapper}>
-        <Carousel
-          data={items}
-          renderItem={renderItem}
-          sliderWidth={400}
-          itemWidth={150}
-          enableMomentum={false}
-          lockScrollWhileSnapping
-          autoplay
-          useScrollView
-          loop
-          autoplayInterval={5000}
-        />
+      <View>
+        <Heading size="lg" style={styles.titleColor}>Saved Listings</Heading>
+        <View style={styles.carouselWrapper}>
+          <Carousel
+            data={items}
+            renderItem={renderItem}
+            sliderWidth={400}
+            itemWidth={150}
+            enableMomentum={false}
+            lockScrollWhileSnapping
+            autoplay
+            useScrollView
+            loop
+            autoplayInterval={5000}
+            keyExtractor={() => uuidv4()}
+          />
+        </View>
       </View>
-    </View>
 
-    <View>
-      <Heading size="lg" style={styles.titleColor}>Today&apos;s listings</Heading>
-      <View style={styles.carouselWrapper}>
-        <Carousel
-          data={items}
-          renderItem={renderItem}
-          sliderWidth={400}
-          itemWidth={150}
-          enableMomentum={false}
-          lockScrollWhileSnapping
-          autoplay
-          useScrollView
-          loop
-          autoplayInterval={5000}
-        />
+      <View style={{ marginBottom: 10 }}>
+        <Heading size="lg" style={styles.titleColor}>Today&apos;s listings</Heading>
+        <View style={styles.carouselWrapper}>
+          <Carousel
+            data={items}
+            renderItem={renderItem}
+            sliderWidth={400}
+            itemWidth={150}
+            enableMomentum={false}
+            lockScrollWhileSnapping
+            autoplay
+            useScrollView
+            loop
+            autoplayInterval={5000}
+            keyExtractor={() => uuidv4()}
+          />
+        </View>
       </View>
-    </View>
-  </View>
+    </ScrollView>
+  </SafeAreaView>
 );
 
 export default Home;
