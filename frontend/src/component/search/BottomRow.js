@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Icon, Button, HStack, Menu, Pressable,
-} from 'native-base';
+import { Icon, Button, HStack, Menu, Pressable } from 'native-base';
 import { StyleSheet } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
@@ -40,22 +38,16 @@ const styles = StyleSheet.create({
 });
 
 const BottomRow = ({ navigationRef }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const render = () => {
     if (isLoggedIn) {
       return (
         <HStack space={3} justifyContent="center" background="black" style={styles.footer}>
-          <Button
-            onPress={() => navigationRef.current?.navigate('Account')}
-            style={styles.button}
-          >
+          <Button onPress={() => navigationRef.current?.navigate('Account')} style={styles.button}>
             <Icon as={FontAwesome} style={styles.icon} name="user" size="8" />
           </Button>
-          <Button
-            onPress={() => navigationRef.current?.navigate('Cart')}
-            style={styles.button}
-          >
+          <Button onPress={() => navigationRef.current?.navigate('Cart')} style={styles.button}>
             <Icon as={FontAwesome} style={styles.icon} name="shopping-cart" size="8" />
           </Button>
           <Menu
@@ -65,11 +57,11 @@ const BottomRow = ({ navigationRef }) => {
               <Pressable accessibilityLabel="More options menu" {...triggerProps}>
                 <Icon as={FontAwesome} style={styles.plusIcon} name="plus" size="8" />
               </Pressable>
-            )}
-          >
+            )}>
             <Menu.Item onPress={() => navigationRef.current?.navigate('Seller')}>Sell</Menu.Item>
             <Menu.Item onPress={() => navigationRef.current?.navigate('Item')}>Item</Menu.Item>
             <Menu.Item onPress={() => navigationRef.current?.navigate('Home')}>Home</Menu.Item>
+            <Menu.Item onPress={() => navigationRef.current?.navigate('Login')}>Logout</Menu.Item>
             <Menu.Item isDisabled>Placeholder</Menu.Item>
           </Menu>
         </HStack>
@@ -77,17 +69,17 @@ const BottomRow = ({ navigationRef }) => {
     }
     return (
       <HStack space={2} justifyContent="center" background="black" style={styles.footer}>
-        <Button style={styles.blueButton} onPress={() => navigationRef.current?.navigate('Login')}>Log In</Button>
-        <Button style={styles.blueButton} onPress={() => navigationRef.current?.navigate('Login')}>Sign Up</Button>
+        <Button style={styles.blueButton} onPress={() => navigationRef.current?.navigate('Login')}>
+          Log In
+        </Button>
+        <Button style={styles.blueButton} onPress={() => navigationRef.current?.navigate('Login')}>
+          Sign Up
+        </Button>
       </HStack>
     );
   };
 
-  return (
-    <>
-      {render()}
-    </>
-  );
+  return <>{render()}</>;
 };
 
 export default BottomRow;
