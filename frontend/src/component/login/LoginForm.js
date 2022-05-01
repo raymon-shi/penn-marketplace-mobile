@@ -35,9 +35,9 @@ const LoginForm = ({ navigation }) => {
   const [lockedOutTime, setLockedOutTime] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const storeLoginData = async (mail) => {
+  const storeLoginData = async (mail, name) => {
     try {
-      // await AsyncStorage.setItem('name', name);
+      await AsyncStorage.setItem('name', name);
       await AsyncStorage.setItem('email', mail);
     } catch (error) {
       console.log(error);
@@ -46,8 +46,9 @@ const LoginForm = ({ navigation }) => {
 
   const userLogin = async () => {
     try {
-      await axios.post(`${serverURL}/account/login`, { email, password }).then(() => navigation.navigate('Home'));
-      await storeLoginData(email);
+      const { data } = await axios.post(`${serverURL}/account/login`, { email, password });
+      await storeLoginData(email, data.name);
+      navigation.navigate('Home');
       console.log('hello world?');
     } catch (error) {
       console.log('error!');

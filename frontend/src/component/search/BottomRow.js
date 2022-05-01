@@ -62,6 +62,7 @@ const BottomRow = ({ navigationRef }) => {
   const setLoggedOutData = async () => {
     try {
       await AsyncStorage.setItem('email', '');
+      await AsyncStorage.setItem('name', '');
       setIsLoggedIn(false);
     } catch (error) {
       console.log(error);

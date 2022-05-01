@@ -119,13 +119,14 @@ router.post('/addBidListing', async (req, res, next) => {
 });
 
 // route to list a bid listing with picture
-router.post('/addBidListingPic', upload.single('imageFile'), async (req, res, next) => {
+router.post('/addBidListingPic', upload.single('image'), async (req, res, next) => {
   const {
-    product, productDescr, tag,
+    product, productDescr, tag, name,
   } = req.body;
   try {
+    console.log(req.file);
     await ItemBid.create({
-      posterName: req.session.name,
+      posterName: req.session.name || name,
       itemName: product,
       itemDescr: productDescr,
       media: req.file.path,
@@ -134,6 +135,7 @@ router.post('/addBidListingPic', upload.single('imageFile'), async (req, res, ne
     });
     res.status(201).send('Bid listing was successfully posted!');
   } catch (error) {
+    console.log(error);
     next(new Error('Error with creating a bid listing'));
   }
 });

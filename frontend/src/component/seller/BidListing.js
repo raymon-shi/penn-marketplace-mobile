@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {
-  View, StyleSheet, Image,
+  View, StyleSheet, Image, Platform,
 } from 'react-native';
 import {
   Center, Box, Heading, FormControl, Input, Button, Select, TextArea,
 } from 'native-base';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,6 +41,8 @@ const BidListing = ({ onSubmit, onBack }) => {
   const [img, setImg] = useState(null);
   const [tag, setTag] = useState('');
 
+  const serverURL = 'http://localhost:8081';
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -47,7 +51,45 @@ const BidListing = ({ onSubmit, onBack }) => {
       quality: 1,
     });
     if (!result.cancelled) {
-      setImg(result.uri);
+      setImg(result);
+    }
+  };
+
+  const submitListing = async () => {
+    if (img) {
+      const name = await AsyncStorage.getItem('name');
+      const formData = new FormData();
+      formData.append('product', product);
+      formData.append('productDescr', productDescr);
+      formData.append('tag', tag);
+      formData.append('name', name);
+      formData.append('image', {
+        uri: Platform.OS === 'ios' ? img.uri.replace('file://', '') : img.uri,
+        name: 'photo.jpg',
+        type: 'image/jpg',
+      });
+      const options = {
+        method: 'POST',
+        headers: {
+          Accept: '*/*',
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      };
+      console.log(name);
+      // fetch(`${serverURL}/item/addBidListingPic`, options).catch((err) => alert('Error in posting! Please try again.'));
+      axios.post(`${serverURL}/item/addBidListingPic`, formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(() => {
+        setProduct('');
+        setImg(null);
+        setProductDescr('');
+        setTag('');
+        onSubmit();
+      }).catch((err) => alert('Error in posting! Please try again.'));
     }
   };
 
@@ -71,7 +113,7 @@ const BidListing = ({ onSubmit, onBack }) => {
             >
               Upload Image
             </Button>
-            {img && <Image source={{ uri: img }} style={{ width: 50, height: 50 }} />}
+            {img && <Image source={{ uri: img.uri }} style={{ width: 50, height: 50 }} />}
           </View>
         </FormControl>
         <FormControl mb="2" isRequired>
@@ -91,7 +133,7 @@ const BidListing = ({ onSubmit, onBack }) => {
           size="md"
           w="50%"
           style={styles.blueButton}
-          onPress={onSubmit}
+          onPress={submitListing}
           _text={{ color: 'white' }}
           isDisabled={product === '' || productDescr === ''}
         >

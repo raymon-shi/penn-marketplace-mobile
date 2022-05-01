@@ -45,6 +45,7 @@ router.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
+    console.log(user);
     const match = await bcrypt.compare(password, user.password);
 
     // if past the lockout period
