@@ -8,7 +8,13 @@ import {
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 import axios from 'axios';
+
+const { manifest } = Constants;
+
+// send to correct server (different if web vs expo app)
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   container: {
@@ -41,8 +47,6 @@ const BidListing = ({ onSubmit, onBack }) => {
   const [img, setImg] = useState(null);
   const [tag, setTag] = useState('');
 
-  const serverURL = 'http://localhost:8081';
-
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -56,11 +60,11 @@ const BidListing = ({ onSubmit, onBack }) => {
   };
 
   const submitListing = async () => {
+    const name = await AsyncStorage.getItem('name');
     if (img) {
-      const name = await AsyncStorage.getItem('name');
       const formData = new FormData();
       formData.append('product', product);
-      formData.append('productDescr', productDescr);
+      formData.append('productDescr', productDescr.trimEnd());
       formData.append('tag', tag);
       formData.append('name', name);
       formData.append('image', {
@@ -68,28 +72,17 @@ const BidListing = ({ onSubmit, onBack }) => {
         name: 'photo.jpg',
         type: 'image/jpg',
       });
-      const options = {
-        method: 'POST',
-        headers: {
-          Accept: '*/*',
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-      };
-      console.log(name);
-      // fetch(`${serverURL}/item/addBidListingPic`, options).catch((err) => alert('Error in posting! Please try again.'));
       axios.post(`${serverURL}/item/addBidListingPic`, formData, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
         },
-      }).then(() => {
-        setProduct('');
-        setImg(null);
-        setProductDescr('');
-        setTag('');
-        onSubmit();
-      }).catch((err) => alert('Error in posting! Please try again.'));
+      }).then(() => onSubmit()).catch((err) => alert('Error in posting! Please try again.'));
+    } else {
+      axios.post(`${serverURL}/item/addBidListing`, {
+        product, productDescr: productDescr.trimEnd(), tag, name,
+      })
+        .then(() => onSubmit()).catch((err) => alert('Error in posting! Please try again.'));
     }
   };
 

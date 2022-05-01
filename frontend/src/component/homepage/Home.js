@@ -70,7 +70,7 @@ const Home = () => (
             useScrollView
             loop
             autoplayInterval={5000}
-            keyExtractor={() => uuidv4()}
+            keyExtractor={(item, index) => index.toString()}
           />
         </View>
       </View>
@@ -89,7 +89,7 @@ const Home = () => (
             useScrollView
             loop
             autoplayInterval={5000}
-            keyExtractor={() => uuidv4()}
+            keyExtractor={(item, index) => index.toString()}
           />
         </View>
       </View>
@@ -108,7 +108,7 @@ const Home = () => (
             useScrollView
             loop
             autoplayInterval={5000}
-            keyExtractor={() => uuidv4()}
+            keyExtractor={(item, index) => index.toString()}
           />
         </View>
       </View>
