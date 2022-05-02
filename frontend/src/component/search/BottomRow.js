@@ -5,6 +5,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Chat from '../chat/component/Chat';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,12 +47,15 @@ const BottomRow = ({ navigationRef }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [refresh, setRefresh] = useState(0);
+  const [showModal, setShowModal] = useState(false);
 
   const getLoginData = async () => {
     try {
       const emailValue = await AsyncStorage.getItem('email');
+      const nameValue = await AsyncStorage.getItem('name');
       setEmail(emailValue);
-      if (emailValue) {
+      setName(nameValue);
+      if (emailValue && nameValue) {
         setIsLoggedIn(true);
       }
     } catch (error) {
@@ -62,6 +66,7 @@ const BottomRow = ({ navigationRef }) => {
   const setLoggedOutData = async () => {
     try {
       await AsyncStorage.setItem('email', '');
+      await AsyncStorage.setItem('name', '');
       setIsLoggedIn(false);
     } catch (error) {
       console.log(error);
@@ -82,6 +87,13 @@ const BottomRow = ({ navigationRef }) => {
           <Button onPress={() => navigationRef.current?.navigate('Cart')} style={styles.button}>
             <Icon as={FontAwesome} style={styles.icon} name="shopping-cart" size="8" />
           </Button>
+          {/* How does one icon? */}
+          <Button onPress={() => setShowModal(true)} style={styles.button}>
+            <Icon as={FontAwesome} style={styles.icon} name="fa-message" size="8" />
+          </Button>
+
+          <Chat showModal={showModal} setShowModal={setShowModal} email={email} name={name} />
+
           <Menu
             // eslint-disable-next-line react/no-unstable-nested-components
             trigger={(triggerProps) => (

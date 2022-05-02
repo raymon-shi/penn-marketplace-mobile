@@ -10,9 +10,7 @@ const router = express.Router();
 
 // route to create an account
 router.post('/signup', isPennStudent, async (req, res, next) => {
-  const {
-    email, firstName, lastName, password, month, day, year, major, school, classYear,
-  } = req.body;
+  const { email, firstName, lastName, password, month, day, year, major, school, classYear } = req.body;
   try {
     const user = await User.create({
       email,
@@ -48,7 +46,7 @@ router.post('/login', async (req, res, next) => {
     const match = await bcrypt.compare(password, user.password);
 
     // if past the lockout period
-    if ((new Date().getTime() > user.lockedOutTime)) {
+    if (new Date().getTime() > user.lockedOutTime) {
       // if the passwords match
       if (match) {
         req.session.email = email;
@@ -61,10 +59,7 @@ router.post('/login', async (req, res, next) => {
         // otherwise, increase the login attempt and check if exceed and increase lockout period
         await User.updateOne({ email }, { loginAttempts: user.loginAttempts + 1 });
         if (user.loginAttempts >= 3) {
-          await User.updateOne(
-            { email },
-            { lockedOutTime: new Date(new Date().getTime() + (1 * 60000)).getTime() },
-          );
+          await User.updateOne({ email }, { lockedOutTime: new Date(new Date().getTime() + 1 * 60000).getTime() });
         }
         next(new Error('There was not a match!'));
       }
@@ -85,8 +80,15 @@ router.get('/user', (req, res, next) => {
 });
 
 // route get user information
-router.get('/getUser', async (req, res, next) => {
-  const user = await User.findOne({ email: req.session.email });
+// router.get('/getUser', async (req, res, next) => {
+//   const user = await User.findOne({ email: req.session.email });
+//   res.send({ user });
+// });
+
+router.post('/getUser', async (req, res, next) => {
+  const { body } = req;
+  const { email } = body;
+  const user = await User.findOne({ email });
   res.send({ user });
 });
 
@@ -145,9 +147,7 @@ router.post('/findUserOnEmail', async (req, res) => {
 
 // Route post a review
 router.post('/postReview', async (req, res) => {
-  const {
-    author, recipient, reviewRating, reviewContent,
-  } = req.body;
+  const { author, recipient, reviewRating, reviewContent } = req.body;
   const newReview = {
     authorEmail: author.email,
     authorName: author.name,
@@ -200,10 +200,7 @@ router.post('/unfollow', async (req, res) => {
           break;
         }
       }
-      await User.updateOne(
-        { email: unfollowedUser.email },
-        { followers: unfollowedUser.followers },
-      );
+      await User.updateOne({ email: unfollowedUser.email }, { followers: unfollowedUser.followers });
       await User.updateOne({ email: req.session.email }, { following: newFollowList });
       res.status(200).send('Success.');
     } catch (error) {
@@ -219,10 +216,7 @@ router.post('/unfollow', async (req, res) => {
           break;
         }
       }
-      await User.updateOne(
-        { email: removedFollower.email },
-        { following: removedFollower.following },
-      );
+      await User.updateOne({ email: removedFollower.email }, { following: removedFollower.following });
       await User.updateOne({ email: req.session.email }, { followers: newFollowList });
       res.status(200).send('Success.');
     } catch (error) {

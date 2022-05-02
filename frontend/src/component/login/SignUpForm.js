@@ -39,10 +39,11 @@ const SignUpForm = ({ showSignUp, setShowSignUp, navigation }) => {
   const [major, setMajor] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const storeLoginData = async (mail) => {
+  const storeLoginData = async () => {
     try {
-      // await AsyncStorage.setItem('name', name);
-      await AsyncStorage.setItem('email', mail);
+      const { data } = await axios.post(`${serverURL}/account/getUser`, { email });
+      await AsyncStorage.setItem('email', data.user.email);
+      await AsyncStorage.setItem('name', data.user.name);
     } catch (error) {
       console.log(error);
     }
@@ -178,8 +179,7 @@ const SignUpForm = ({ showSignUp, setShowSignUp, navigation }) => {
             <Button
               style={styles.redButton}
               isDisabled={!firstName.match(/^[a-zA-Z]+$/) || !lastName.match(/^[a-zA-Z]+$/) || password.length < 8}
-              onPress={signup}
-            >
+              onPress={signup}>
               Sign Up
             </Button>
           </Button.Group>
