@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Center, FormControl, Input, Stack, Button, Divider, Modal, Alert, Text } from 'native-base';
-import { StyleSheet } from 'react-native';
+import {
+  Center, FormControl, Input, Stack, Button, Divider, Modal, Alert, Text,
+} from 'native-base';
+import { StyleSheet, Platform } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 import SignUpForm from './SignUpForm';
 
-const serverURL = 'http://localhost:8081';
+const { manifest } = Constants;
+
+// send to correct server (different if web vs expo app)
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   container: {
@@ -35,11 +41,13 @@ const LoginForm = ({ navigation }) => {
   const [lockedOutTime, setLockedOutTime] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
 
+
   const storeLoginData = async () => {
     try {
       const { data } = await axios.post(`${serverURL}/account/getUser`, { email });
       await AsyncStorage.setItem('email', data.user.email);
       await AsyncStorage.setItem('name', data.user.name);
+
     } catch (error) {
       console.log(error);
     }
@@ -49,6 +57,7 @@ const LoginForm = ({ navigation }) => {
     try {
       await axios.post(`${serverURL}/account/login`, { email, password }).then(() => navigation.navigate('Home'));
       await storeLoginData();
+
       console.log('hello world?');
     } catch (error) {
       console.log('error!');

@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Item = ({ navigation }) => {
+const Item = ({ navigation, route }) => {
   const [itemName, setItemName] = useState('');
   const [itemPrice, setItemPrice] = useState(0);
   const [itemLister, setItemLister] = useState('');
@@ -73,6 +73,8 @@ const Item = ({ navigation }) => {
   const [itemImage, setItemImage] = useState('');
   const [isBid, setIsBid] = useState(true);
   const [bidAmount, setBidAmount] = useState('');
+
+  console.log(route.params.itemId);
 
   function setItem() {
     setItemName(Data.title);

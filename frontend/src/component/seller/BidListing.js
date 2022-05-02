@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import {
-  View, StyleSheet, Image,
+  View, StyleSheet, Image, Platform,
 } from 'react-native';
 import {
   Center, Box, Heading, FormControl, Input, Button, Select, TextArea,
 } from 'native-base';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+import axios from 'axios';
+
+const { manifest } = Constants;
+
+// send to correct server (different if web vs expo app)
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +55,34 @@ const BidListing = ({ onSubmit, onBack }) => {
       quality: 1,
     });
     if (!result.cancelled) {
-      setImg(result.uri);
+      setImg(result);
+    }
+  };
+
+  const submitListing = async () => {
+    const name = await AsyncStorage.getItem('name');
+    if (img) {
+      const formData = new FormData();
+      formData.append('product', product);
+      formData.append('productDescr', productDescr.trimEnd());
+      formData.append('tag', tag);
+      formData.append('name', name);
+      formData.append('image', {
+        uri: Platform.OS === 'ios' ? img.uri.replace('file://', '') : img.uri,
+        name: 'photo.jpg',
+        type: 'image/jpg',
+      });
+      axios.post(`${serverURL}/item/addBidListingPic`, formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(() => onSubmit()).catch((err) => alert('Error in posting! Please try again.'));
+    } else {
+      axios.post(`${serverURL}/item/addBidListing`, {
+        product, productDescr: productDescr.trimEnd(), tag, name,
+      })
+        .then(() => onSubmit()).catch((err) => alert('Error in posting! Please try again.'));
     }
   };
 
@@ -71,7 +106,7 @@ const BidListing = ({ onSubmit, onBack }) => {
             >
               Upload Image
             </Button>
-            {img && <Image source={{ uri: img }} style={{ width: 50, height: 50 }} />}
+            {img && <Image source={{ uri: img.uri }} style={{ width: 50, height: 50 }} />}
           </View>
         </FormControl>
         <FormControl mb="2" isRequired>
@@ -91,7 +126,7 @@ const BidListing = ({ onSubmit, onBack }) => {
           size="md"
           w="50%"
           style={styles.blueButton}
-          onPress={onSubmit}
+          onPress={submitListing}
           _text={{ color: 'white' }}
           isDisabled={product === '' || productDescr === ''}
         >

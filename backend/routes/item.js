@@ -17,7 +17,7 @@ const ItemBid = require('../models/ItemBid');
 
 const router = express.Router();
 
-router.post('/search',  async (req, res, next) => {
+router.post('/search', async (req, res, next) => {
   const pattern = new RegExp(`${req.body.filter}`, 'i');
   const filterPattern = new RegExp(`${req.body.label}`, 'i');
   try {
@@ -29,7 +29,7 @@ router.post('/search',  async (req, res, next) => {
   }
 });
 
-router.post('/bidSearch',  async (req, res, next) => {
+router.post('/bidSearch', async (req, res, next) => {
   const pattern = new RegExp(`${req.body.filter}`, 'i');
   try {
     const bidListings = await ItemBid.find({ itemName: pattern });
@@ -62,11 +62,11 @@ router.get('/getBidListings', async (req, res, next) => {
 // route to list a regular listing
 router.post('/addRegListing', async (req, res, next) => {
   const {
-    product, productDescr, price, tag,
+    product, productDescr, price, tag, name,
   } = req.body;
   try {
     await ItemRegular.create({
-      posterName: req.session.name,
+      posterName: req.session.name || name,
       itemName: product,
       itemDescr: productDescr,
       price,
@@ -80,13 +80,13 @@ router.post('/addRegListing', async (req, res, next) => {
 
 // route to list a regular listing with picture
 // upload.single is a middleware to process imageFile, access the file details using req.file
-router.post('/addRegListingPic', upload.single('imageFile'), async (req, res, next) => {
+router.post('/addRegListingPic', upload.single('image'), async (req, res, next) => {
   const {
-    product, productDescr, price, tag,
+    product, productDescr, price, tag, name,
   } = req.body;
   try {
     await ItemRegular.create({
-      posterName: req.session.name,
+      posterName: req.session.name || name,
       itemName: product,
       itemDescr: productDescr,
       media: req.file.path,
@@ -102,11 +102,11 @@ router.post('/addRegListingPic', upload.single('imageFile'), async (req, res, ne
 // route to list a bid listing
 router.post('/addBidListing', async (req, res, next) => {
   const {
-    product, productDescr, tag,
+    product, productDescr, tag, name,
   } = req.body;
   try {
     await ItemBid.create({
-      posterName: req.session.name,
+      posterName: req.session.name || name,
       itemName: product,
       itemDescr: productDescr,
       price: 0,
@@ -119,13 +119,13 @@ router.post('/addBidListing', async (req, res, next) => {
 });
 
 // route to list a bid listing with picture
-router.post('/addBidListingPic', upload.single('imageFile'), async (req, res, next) => {
+router.post('/addBidListingPic', upload.single('image'), async (req, res, next) => {
   const {
-    product, productDescr, tag,
+    product, productDescr, tag, name,
   } = req.body;
   try {
     await ItemBid.create({
-      posterName: req.session.name,
+      posterName: req.session.name || name,
       itemName: product,
       itemDescr: productDescr,
       media: req.file.path,
