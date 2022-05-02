@@ -15,6 +15,7 @@ import Profile from './src/component/account/Profile';
 import Reviews from './src/component/account/Reviews';
 import Follows from './src/component/account/Follows';
 import Blocked from './src/component/account/Blocked';
+import SearchUsers from './src/component/account/SearchUsers';
 import Item from './src/component/buyer/item/Item';
 import Home from './src/component/homepage/Home';
 import Header from './src/component/homepage/Header';
@@ -28,7 +29,7 @@ const App = () => {
     <NativeBaseProvider>
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
-          initialRouteName="Home"
+          initialRouteName="Account"
           screenOptions={{
             // eslint-disable-next-line react/no-unstable-nested-components
             header: ({ navigation }) => <Header />,
@@ -39,6 +40,7 @@ const App = () => {
           <Stack.Screen name="Reviews" component={Reviews} />
           <Stack.Screen name="Follows" component={Follows} />
           <Stack.Screen name="Blocked" component={Blocked} />
+          <Stack.Screen name="SearchUsers" component={SearchUsers} />
           <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />

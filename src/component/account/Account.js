@@ -41,13 +41,17 @@ const Account = ({ navigation }) => (
     </Pressable>
     <Pressable
       style={styles.button}
-      onPress={() => navigation.navigate('Follows', { followers: user.user.followers, following: user.user.following })}
+      onPress={() => navigation.navigate('Follows', { userProfile: user.user })}
     >
       <Text style={styles.text}>Follows</Text>
       <Image style={styles.image} source={NextIcon} />
     </Pressable>
     <Pressable style={styles.button} onPress={() => navigation.navigate('Blocked', { blocked: user.user.blocked })}>
       <Text style={styles.text}>Blocked</Text>
+      <Image style={styles.image} source={NextIcon} />
+    </Pressable>
+    <Pressable style={styles.button} onPress={() => navigation.navigate('SearchUsers', { userProfile: user.user })}>
+      <Text style={styles.text}>Search Users</Text>
       <Image style={styles.image} source={NextIcon} />
     </Pressable>
   </SafeAreaView>
