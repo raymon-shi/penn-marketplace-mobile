@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, StyleSheet, Image,
+  View, StyleSheet, Image, Platform,
 } from 'react-native';
 import {
   Center, Box, Heading, FormControl, Input, Button, Select, TextArea,
@@ -8,6 +8,14 @@ import {
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import NumericInput from '@wwdrew/react-native-numeric-textinput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+import axios from 'axios';
+
+const { manifest } = Constants;
+
+// send to correct server (different if web vs expo app)
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +55,6 @@ const PriceListing = ({ onSubmit, onBack }) => {
   const [price, setPrice] = useState('');
   const [img, setImg] = useState(null);
   const [tag, setTag] = useState('');
-  const [invalidImgAlert, setInvalidImgAlert] = useState(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -58,7 +65,35 @@ const PriceListing = ({ onSubmit, onBack }) => {
     });
 
     if (!result.cancelled) {
-      setImg(result.uri);
+      setImg(result);
+    }
+  };
+
+  const submitListing = async () => {
+    const name = await AsyncStorage.getItem('name');
+    if (img) {
+      const formData = new FormData();
+      formData.append('product', product);
+      formData.append('productDescr', productDescr.trimEnd());
+      formData.append('tag', tag);
+      formData.append('name', name);
+      formData.append('price', price);
+      formData.append('image', {
+        uri: Platform.OS === 'ios' ? img.uri.replace('file://', '') : img.uri,
+        name: 'photo.jpg',
+        type: 'image/jpg',
+      });
+      axios.post(`${serverURL}/item/addRegListingPic`, formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(() => onSubmit()).catch((err) => alert('Error in posting! Please try again.'));
+    } else {
+      axios.post(`${serverURL}/item/addRegListing`, {
+        product, productDescr: productDescr.trimEnd(), price, tag, name,
+      })
+        .then(() => onSubmit()).catch((err) => alert('Error in posting! Please try again.'));
     }
   };
 
@@ -82,7 +117,7 @@ const PriceListing = ({ onSubmit, onBack }) => {
             >
               Upload Image
             </Button>
-            {img && <Image source={{ uri: img }} style={{ width: 50, height: 50 }} />}
+            {img && <Image source={{ uri: img.uri }} style={{ width: 50, height: 50 }} />}
           </View>
         </FormControl>
         <FormControl mb="2" isRequired>
@@ -113,7 +148,7 @@ const PriceListing = ({ onSubmit, onBack }) => {
           size="md"
           w="50%"
           style={styles.blueButton}
-          onPress={onSubmit}
+          onPress={submitListing}
           _text={{ color: 'white' }}
           isDisabled={product === '' || productDescr === '' || price === '' || Number(price) <= 0}
         >
