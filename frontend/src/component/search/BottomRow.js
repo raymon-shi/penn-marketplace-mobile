@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Button, HStack, Menu, Pressable } from 'native-base';
-import { StyleSheet } from 'react-native';
+import {
+  Icon, Button, HStack, Menu, Pressable,
+} from 'native-base';
+import { StyleSheet, Platform } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Constants from 'expo-constants';
+
+const { manifest } = Constants;
+
+// send to correct server (different if web vs expo app)
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   container: {
@@ -39,8 +47,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const serverURL = 'http://localhost:8081';
-
 const BottomRow = ({ navigationRef }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [name, setName] = useState('');
@@ -62,6 +68,7 @@ const BottomRow = ({ navigationRef }) => {
   const setLoggedOutData = async () => {
     try {
       await AsyncStorage.setItem('email', '');
+      await AsyncStorage.setItem('name', '');
       setIsLoggedIn(false);
     } catch (error) {
       console.log(error);

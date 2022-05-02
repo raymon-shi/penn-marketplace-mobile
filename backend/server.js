@@ -31,7 +31,7 @@ const { Server } = require('socket.io');
 const server = http.createServer(app); // create our server
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:19006',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   },
 }); // create our IO sockets
