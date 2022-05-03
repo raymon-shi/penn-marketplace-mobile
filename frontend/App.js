@@ -7,7 +7,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Login from './src/component/login/Login';
 import Seller from './src/component/seller/Seller';
-import Search from './src/component/search/Search';
 import Cart from './src/component/buyer/cart/Cart';
 import Checkout from './src/component/buyer/checkout/Checkout';
 import Account from './src/component/account/Account';
@@ -19,6 +18,7 @@ import Item from './src/component/buyer/item/Item';
 import Home from './src/component/homepage/Home';
 import Header from './src/component/homepage/Header';
 import BottomRow from './src/component/search/BottomRow';
+import SearchResults from './src/component/search/SearchResults';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -42,7 +42,7 @@ const App = () => {
           <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Search" component={Search} />
+          <Stack.Screen name="Results" component={SearchResults} />
           <Stack.Screen name="Seller" component={Seller} />
           <Stack.Screen name="Cart" component={Cart} />
           <Stack.Screen name="Checkout" component={Checkout} />

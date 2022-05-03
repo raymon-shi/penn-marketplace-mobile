@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Center, Input, Image, Heading, Button,
+  Center, Input, Image, Heading, Button, Select, View, FormControl,
 } from 'native-base';
-import { StyleSheet } from 'react-native-web';
+import { StyleSheet } from 'react-native';
 import pennLogo from './assets/UniversityofPennsylvania_Shield_RGB.png';
 
 const styles = StyleSheet.create({
   searchBar: {
-    backgroundColor: '#011F5B',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    top: 0,
+    position: "absolute",
   },
-  pennLogo: {
-    height: 50,
-    width: 50,
-    resizeMode: 'contain',
+  content: {
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent: 'center'
   },
   inputStyle: {
     backgroundColor: '#fff',
   },
   textStyle: {
     color: 'white',
+    
   },
   headerBar: {
     backgroundColor: 'white',
@@ -32,20 +31,28 @@ const styles = StyleSheet.create({
   },
 });
 
-const SearchBar = ({
-  searchBarText, setSearchBarText, filterType, setFilterType,
-}) => {
-  const filterHeaders = ['Home', 'Saved', 'Textbooks', 'Services', 'Clothes', 'Housing & Furniture'];
+const SearchBar = ({ navigation }) => {
+  const [filter, setFilter] = useState('');
+  const [query, setQuery] = useState('');
+
   return (
-    <Center w="100%">
-      <Box w="100%" style={styles.searchBar}>
-        <Input w="75%" placeholder="Explore the Penn Marketplace!" variant="filled" style={styles.inputStyle} />
-      </Box>
-      <Box style={styles.headerBar}>
-        {filterHeaders.map((filter) => <Button key={filter} value={filter} onPress={() => setFilterType(filter)}>{` ${filter} `}</Button>)}
-      </Box>
-      {filterType}
+    <Center>
+      <View style={styles.content}>
+        <Input w="200"placeholder="Explore the Penn Marketplace!" variant="filled" onChangeText={setQuery}/>
+        <Select w="40" style={{ color: "white" }} variant="filled" selectedValue={filter} accessibilityLabel="All" placeholder="All" onValueChange={itemValue => setFilter(itemValue)}>
+            <Select.Item label="All" value="" />
+            <Select.Item label="Home" value="Home" />
+            <Select.Item label="Textbooks" value="Textbooks" />
+            <Select.Item label="Services" value="Services" />
+            <Select.Item label="Clothes" value="Clothes" />
+            <Select.Item label="Housing &amp; Furniture" value="Housing &amp; Furniture" />
+          </Select>
+        </View>
+      <Button onPress={() => navigation.navigate('Results', {searchInput: query, category: filter})}>
+          Search!
+      </Button>
     </Center>
+
   );
 };
 
