@@ -1,12 +1,15 @@
 import React, { useRef, useState } from 'react';
 import {
-  StyleSheet, Button, Text, View, TextInput, FlatList,
+  StyleSheet, Button, Text, View, TextInput, FlatList, Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import { Modal } from 'react-bootstrap';
+import Constants from 'expo-constants';
 import AccountHeader from './AccountHeader';
 // import { SocketContext } from '../../homepage/components/Socket';
+
+const { manifest } = Constants;
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   inputStyle: {
@@ -16,13 +19,13 @@ const styles = StyleSheet.create({
     width: '80%',
     marginTop: '2%',
   },
-  searchButtonStyle: {
-    backgroundColor: '#011F5B',
-    color: 'white',
-    borderRadius: 5,
-    marginLeft: '5%',
-    padding: '5px 10px',
+  inline: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
+  modal: {
+    margin: 10,
+  }
 });
 
 const SearchUsers = ({ route, navigation }) => {
@@ -49,7 +52,7 @@ const SearchUsers = ({ route, navigation }) => {
     if (!alreadyDone.current) {
       try {
         // socket.emit('new follow', selectedUser.current.name);
-        await axios.post('localhost:8000/account/follow', {
+        await axios.post(`${serverURL}/account/follow`, {
           follower: userProfile,
           followedUser: selectedUser.current,
         });
@@ -85,24 +88,6 @@ const SearchUsers = ({ route, navigation }) => {
     setShowBlock(true);
   }
 
-  async function showReportBox(e) {
-    try {
-      const { data } = await axios.post('localhost:8000/account/findUserOnEmail', { email: matchedUsers[e.target.value].email });
-      const user = data[0];
-      selectedUser.current = user;
-    } catch (error) {
-      throw new Error('Error finding user on email.');
-    }
-    alreadyDone.current = false;
-    for (let i = 0; i < selectedUser.current.reports.length; i += 1) {
-      if (selectedUser.current.reports[i].authorEmail === userProfile.email) {
-        alreadyDone.current = true;
-        break;
-      }
-    }
-    setShowReport(true);
-  }
-
   async function reportUser() {
     if (!reportContent.current) {
       throw new Error('You must type a reason for reporting this user.');
@@ -128,37 +113,36 @@ const SearchUsers = ({ route, navigation }) => {
   }
 
   const matchedUsersResults = (matchedUser) => {
-    <View>
-      <Text>{matchedUser.name} - {findAverageRating(matchedUser.reviews)} stars</Text>
-      <View className="table-item">
-        <Button
-          title="Report"
-          onPress={async () => {
-            try {
-              const { data } = await axios.post('localhost:8080/account/findUserOnEmail', { email: matchedUser.email });
-              const user = data[0];
-              selectedUser.current = user;
-            } catch (error) {
-              throw new Error('Error finding user on email.');
+    return (
+    <View style={styles.inline}>
+      <Text>{matchedUser.item.name} - {findAverageRating(matchedUser.item.reviews)} stars</Text>
+      <Button
+        title="Report"
+        onPress={async () => {
+          try {
+            const { data } = await axios.post(`${serverURL}/account/findUserOnEmail`, { email: matchedUser.item.email });
+            const user = data[0];
+            selectedUser.current = user;
+          } catch (error) {
+            throw new Error('Error finding user on email.');
+          }
+          alreadyDone.current = false;
+          for (let i = 0; i < selectedUser.current.reports.length; i += 1) {
+            if (selectedUser.current.reports[i].authorEmail === userProfile.email) {
+              alreadyDone.current = true;
+              break;
             }
-            alreadyDone.current = false;
-            for (let i = 0; i < selectedUser.current.reports.length; i += 1) {
-              if (selectedUser.current.reports[i].authorEmail === userProfile.email) {
-                alreadyDone.current = true;
-                break;
-              }
-            }
-            setShowReport(true);
-          }}
-        />
-      </View>
+          }
+          setShowReport(true);
+        }}
+      />
       {/* <div className="table-item">
         <button type="button" value={index} onClick={handleFollow}>Follow</button>
       </div>
       <div className="table-item">
         <button type="button" value={index} onClick={handleBlock}>Block</button>
       </div> */}
-    </View>;
+    </View>);
   };
 
   return (
@@ -167,18 +151,18 @@ const SearchUsers = ({ route, navigation }) => {
       <Text>
         Search for user(s) by name, and give them a review, follow them, or block them.
       </Text>
-      <View>
+      <View style={styles.inline}>
         <TextInput
           style={styles.inputStyle}
           placeholder="Search for users..."
           onChangeText={(input) => setSearchValue(input)}
         />
         <Button
-          style={styles.searchButtonStyle}
           title="Search"
+          color="#011F5B"
           onPress={async () => {
             try {
-              const { data } = await axios.post('localhost:8080/account/findUsersOnName', {
+              const { data } = await axios.post(`${serverURL}/account/findUsersOnName`, {
                 name: searchValue,
               });
               setMatchedUsers(data);
@@ -196,7 +180,28 @@ const SearchUsers = ({ route, navigation }) => {
             keyExtractor={(item) => item.email}
           />
         )}
-      <Modal show={showFollow} onHide={() => { setShowFollow(false); }} backdrop="static" keyboard={false}>
+      <Modal
+        animationType="fade"
+        transparent={false}
+        visible={showReport}
+        presentationStyle="pageSheet"
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <SafeAreaView>
+          <View style={styles.modal}>
+            {alreadyDone.current ? `You have already reported ${selectedUser.current.name}.`
+                : (
+                  <>
+                    <Text>Write your report for this user.</Text>
+                    <TextInput style={styles.inputStyle}/>
+                  </>
+                )}
+          </View> 
+        </SafeAreaView>
+      </Modal>
+      {/* <Modal show={showFollow} onHide={() => { setShowFollow(false); }} backdrop="static" keyboard={false}>
         <Modal.Header closeButton />
         <Modal.Body>
           {alreadyDone.current ? `You are already following ${selectedUser.current.name}.` : `You are now following ${selectedUser.current.name}.`}
@@ -227,7 +232,7 @@ const SearchUsers = ({ route, navigation }) => {
               <button type="button" onClick={reportUser}>Report</button>
             </Modal.Footer>
           )}
-      </Modal>
+      </Modal> */}
     </SafeAreaView>
   );
 };
