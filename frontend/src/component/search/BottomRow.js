@@ -95,7 +95,7 @@ const BottomRow = ({ navigationRef }) => {
           </Button>
           {/* How does one icon? */}
           <Button onPress={() => setShowModal(true)} style={styles.button}>
-            <Icon as={FontAwesome} style={styles.icon} name="fa-message" size="8" />
+            <Icon as={FontAwesome} style={styles.icon} name="comments" size="8" />
           </Button>
 
           <Chat showModal={showModal} setShowModal={setShowModal} email={email} name={name} />
