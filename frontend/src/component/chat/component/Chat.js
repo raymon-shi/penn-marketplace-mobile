@@ -1,7 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Platform } from 'react-native';
 import { Center, Button, Modal, FormControl, Input, VStack, Text, Image } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Constants from 'expo-constants';
+
+const { manifest } = Constants;
+
+// send to correct server (different if web vs expo app)
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const Chat = ({ showModal, setShowModal, email, name }) => {
   const [friendList, setFriendList] = useState([]);
@@ -11,8 +18,6 @@ const Chat = ({ showModal, setShowModal, email, name }) => {
   const [messageInput, setMessageInput] = useState('');
   const [imageLink, setImageLink] = useState('');
   const [showSendImage, setShowSendImage] = useState(false);
-
-  const serverURL = 'http://localhost:8081';
 
   const getFollowed = async () => {
     try {
@@ -125,7 +130,7 @@ const Chat = ({ showModal, setShowModal, email, name }) => {
                 <Image
                   key={`${message.img + index}`}
                   // style={{ objectFit: 'cover' }}
-                  source={{ uri: message.image }}
+                  source={{ uri: message.img }}
                   alt="msg-img"
                   height="100px"
                   width="100px"
@@ -143,7 +148,8 @@ const Chat = ({ showModal, setShowModal, email, name }) => {
                   </Text>
                   <Text mb="3" key={`${message + index}`}>{`${message.sender} : ${message.message}`}</Text>
                 </VStack>
-              ))}
+              ),
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Input mx="3" value={messageInput} onChangeText={setMessageInput} placeholder="Enter message..." w="100%" m="3" />
