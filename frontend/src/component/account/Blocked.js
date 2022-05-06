@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   View, Image, Pressable, StyleSheet, Text, FlatList,
 } from 'react-native';
+import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import UnblockIcon from './assets/Unblock.png';
 import AccountHeader from './AccountHeader';
@@ -42,21 +43,26 @@ const Blocked = ({ route, navigation }) => {
   const blockedUsersList = (blockedUser) => (
     <View style={styles.listItem}>
       <Text style={styles.name}>
-        {blockedUser.item.name}
+        {blockedUser.item.blockedUserName}
       </Text>
       <View style={{ width: '20%' }}>
         <Pressable
-          onPress={() => {
+          onPress={async () => {
             let indexToDelete;
             for (let i = 0; i < blockedUsers.length; i += 1) {
-              if (blockedUsers[i].pennID === blockedUser.item.pennID) {
+              if (blockedUsers[i].email === blockedUser.item.blockedUserEmail) {
                 indexToDelete = i;
                 break;
               }
             }
             const newBlockedUsers = [...blockedUsers];
             newBlockedUsers.splice(indexToDelete, 1);
-            setBlockedUsers(newBlockedUsers);
+            try {
+              await axios.post(`${route.params.serverURL}/account/unblock`, { newBlockedUsers });
+              setBlockedUsers(newBlockedUsers);
+            } catch (error) {
+              throw new Error('Error unblocking user.');
+            }
           }}
         >
           <Image style={styles.image} source={UnblockIcon} />

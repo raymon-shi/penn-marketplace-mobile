@@ -172,7 +172,6 @@ router.post('/postReview', async (req, res) => {
 // Route to follow another user
 router.post('/follow', async (req, res) => {
   let { follower, followedUser } = req.body;
-  console.log(follower, followedUser);
   const newFollow = {
     followerName: follower.name,
     followerEmail: follower.email,

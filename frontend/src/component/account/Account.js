@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   StyleSheet, Pressable, Text, Image, Platform,
 } from 'react-native';
 import Constants from 'expo-constants';
 import axios from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NextIcon from './assets/Next.png';
 import AccountHeader from './AccountHeader';
@@ -35,10 +36,13 @@ const styles = StyleSheet.create({
 const Account = ({ navigation }) => {
   const user = useRef({});
 
-  useEffect(async () => {
-    const { data } = await axios.post(`${serverURL}/account/login`, { email: 'liufei@sas.upenn.edu' });
-    user.current = data;
-  }, []);
+  useFocusEffect(() => {
+    async function effect() {
+      const { data } = await axios.post(`${serverURL}/account/login`, { email: 'liufei@sas.upenn.edu' });
+      user.current = data;
+    }
+    effect();
+  });
 
   return (
     <SafeAreaView>
@@ -47,22 +51,22 @@ const Account = ({ navigation }) => {
         <Text style={styles.text}>Profile</Text>
         <Image style={styles.image} source={NextIcon} />
       </Pressable>
-      <Pressable style={styles.button} onPress={() => navigation.navigate('Reviews', { reviews: user.currentreviews })}>
+      <Pressable style={styles.button} onPress={() => navigation.navigate('Reviews', { reviews: user.current.reviews })}>
         <Text style={styles.text}>Reviews</Text>
         <Image style={styles.image} source={NextIcon} />
       </Pressable>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate('Follows', { userProfile: user.current })}
+        onPress={() => navigation.navigate('Follows', { userProfile: user.current, serverURL })}
       >
         <Text style={styles.text}>Follows</Text>
         <Image style={styles.image} source={NextIcon} />
       </Pressable>
-      <Pressable style={styles.button} onPress={() => navigation.navigate('Blocked', { blocked: user.current.blocked })}>
+      <Pressable style={styles.button} onPress={() => navigation.navigate('Blocked', { blocked: user.current.blocked, serverURL })}>
         <Text style={styles.text}>Blocked</Text>
         <Image style={styles.image} source={NextIcon} />
       </Pressable>
-      <Pressable style={styles.button} onPress={() => navigation.navigate('SearchUsers', { userProfile: user.current })}>
+      <Pressable style={styles.button} onPress={() => navigation.navigate('SearchUsers', { userProfile: user.current, serverURL })}>
         <Text style={styles.text}>Search Users</Text>
         <Image style={styles.image} source={NextIcon} />
       </Pressable>
