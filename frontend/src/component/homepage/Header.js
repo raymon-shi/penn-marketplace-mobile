@@ -33,9 +33,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header = () => (
+const Header = ({ navigation }) => (
   <Box w="100%" style={styles.searchBar}>
-    <SearchBar />
+    <SearchBar navigation={navigation} />
   </Box>
 );
 

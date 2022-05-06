@@ -37,7 +37,7 @@ const SearchBar = ({ navigation }) => {
 
   return (
     <Center>
-      <View style={styles.content}>
+      <View navigation={navigation} style={styles.content}>
         <Input w="200"placeholder="Explore the Penn Marketplace!" variant="filled" onChangeText={setQuery}/>
         <Select w="40" style={{ color: "white" }} variant="filled" selectedValue={filter} accessibilityLabel="All" placeholder="All" onValueChange={itemValue => setFilter(itemValue)}>
             <Select.Item label="All" value="" />

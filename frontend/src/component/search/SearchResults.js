@@ -7,8 +7,10 @@ import Carousel from 'react-native-snap-carousel';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
-// send to correct server (different if web vs expo app)
-const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
+// const { manifest } = Constants;
+
+// // send to correct server (different if web vs expo app)
+// const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   container: {
