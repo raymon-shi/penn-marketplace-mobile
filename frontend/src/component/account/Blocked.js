@@ -49,8 +49,9 @@ const Blocked = ({ route, navigation }) => {
         <Pressable
           onPress={async () => {
             let indexToDelete;
+            console.log(blockedUsers);
             for (let i = 0; i < blockedUsers.length; i += 1) {
-              if (blockedUsers[i].email === blockedUser.item.blockedUserEmail) {
+              if (blockedUsers[i].blockedUserEmail === blockedUser.item.blockedUserEmail) {
                 indexToDelete = i;
                 break;
               }

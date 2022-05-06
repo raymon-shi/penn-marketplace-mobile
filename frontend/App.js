@@ -58,7 +58,7 @@ const App = () => {
           </Stack.Navigator>
           <BottomRow navigationRef={navigationRef} />
         </NavigationContainer>
-      </NativeBaseProvider >
+      </NativeBaseProvider>
     </SSRProvider>
   );
 };

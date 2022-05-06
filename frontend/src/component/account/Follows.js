@@ -39,6 +39,12 @@ const styles = StyleSheet.create({
   modal: {
     margin: 10,
   },
+  inputStyle: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  }
 });
 
 const Follows = ({ route, navigation }) => {
@@ -86,7 +92,7 @@ const Follows = ({ route, navigation }) => {
           onPress={async (e) => {
             let indexToDelete;
             for (let i = 0; i < followedUsers.length; i += 1) {
-              if (followedUsers[i].email === followedUser.item.followingEmail) {
+              if (followedUsers[i].followingEmail === followedUser.item.followingEmail) {
                 indexToDelete = i;
                 break;
               }
@@ -117,7 +123,7 @@ const Follows = ({ route, navigation }) => {
           onPress={async (e) => {
             let indexToDelete;
             for (let i = 0; i < followers.length; i += 1) {
-              if (followers[i].email === follower.item.followerEmail) {
+              if (followers[i].followerEmail === follower.item.followerEmail) {
                 indexToDelete = i;
                 break;
               }
@@ -163,7 +169,7 @@ const Follows = ({ route, navigation }) => {
               style={styles.inputStyle}
               onChangeText={(rating) => { ratingInput.current = Number(rating); }}
             />
-            <Text>Write your report for this {selectedUser.current.name}.</Text>
+            <Text>Write your review for {selectedUser.current.name}.</Text>
             <TextInput
               style={styles.inputStyle}
               // eslint-disable-next-line react/jsx-boolean-value
@@ -183,18 +189,23 @@ const Follows = ({ route, navigation }) => {
                 color="black"
                 onPress={async () => {
                   const ratingChoices = [1, 2, 3, 4, 5];
-                  if (!ratingChoices.includes(ratingInput.current) || reviewContent.current) {
+                  if (!ratingChoices.includes(ratingInput.current) || !reviewContent.current) {
                     throw new Error('User must be rated and a review must be written.');
                   }
 
                   try {
-                    const response = await axios.post('/account/postReview', {
+                    const response = await axios.post(`${route.params.serverURL}/account/postReview`, {
                       author: route.params.userProfile,
                       recipient: selectedUser.current,
                       reviewRating: ratingInput.current,
                       reviewContent: reviewContent.current,
                     });
                     if (response.status === 200) {
+                      Alert.alert(
+                        'Success',
+                        `You have reviewed ${selectedUser.current.name}.`,
+                        [{ text: 'Close' }],
+                      );
                       setShowReview(false);
                     }
                   } catch (error) {
