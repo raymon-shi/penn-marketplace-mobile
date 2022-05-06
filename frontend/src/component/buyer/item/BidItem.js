@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Item = ({ navigation, route }) => {
+const BidItem = ({ navigation, route }) => {
   const [itemName, setItemName] = useState('');
   const [itemPrice, setItemPrice] = useState(0);
   const [itemLister, setItemLister] = useState('');
@@ -94,7 +94,6 @@ const Item = ({ navigation, route }) => {
 
   function handleCart(e) {
     e.preventDefault();
-    console.log('Added to Cart!');
     navigation.navigate("Cart");
   }
 
@@ -166,4 +165,4 @@ const Item = ({ navigation, route }) => {
   );
 };
 
-export default Item;
+export default BidItem;

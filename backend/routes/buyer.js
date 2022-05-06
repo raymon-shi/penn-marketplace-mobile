@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const express = require('express');
 const ItemRegular = require('../models/ItemRegular');
 const ItemBid = require('../models/ItemBid');
@@ -31,12 +32,12 @@ router.get('/getBidListing/:id', async (req, res, next) => {
 // route to add regular item to cart
 router.post('/addCartRegItem/:id', async (req, res) => {
   try {
-    const item = await ItemRegular.findById(req.params.id);
-    console.log(item);
+    // const item = await ItemRegular.findById(req.params.id);
+    const itemId = req.params.id;
     await User.findOneAndUpdate(
-      { email: req.session.email, 
+      { email: req.session.email,
         'shoppingCart._id': { $ne: req.params.id }},
-      { $addToSet: { shoppingCart: item }});
+      { $addToSet: { shoppingCart: itemId }});
     res.status(200).send('Regular listing successfully added to cart!');
   } catch (error) {
     res.status(500).send('An unknown error occured');
@@ -47,11 +48,12 @@ router.post('/addCartRegItem/:id', async (req, res) => {
 // route to add bid item to cart
 router.post('/addCartBidItem/:id', async (req, res) => {
   try {
+    const { bid } = req.body;
     const item = await ItemBid.findById(req.params.id);
     await User.findOneAndUpdate(
-      { email: req.session.email, 
+      { email: req.session.email,
         'shoppingCart._id': { $ne: req.params.id }},
-      { $addToSet: { shoppingCart: item }});
+      { $addToSet: { shoppingCart: {item , bid} }});
     res.status(200).send('Regular listing successfully added to cart!');
   } catch (error) {
     res.status(500).send('An unknown error occured');
@@ -62,10 +64,11 @@ router.post('/addCartBidItem/:id', async (req, res) => {
 // route to remove reg item from cart
 router.post('/removeCartRegItem/:id', async (req, res) => {
   try {
-    const item = await ItemRegular.findById(req.params.id);
+    // const item = await ItemRegular.findById(req.params.id);
+    const itemId = req.params.id;
     await User.findOneAndUpdate(
       { email: req.session.email },
-      { $pull: { shoppingCart: item }});
+      { $pull: { shoppingCart: itemId }});
     res.status(200).send('Regular listing removed successfully from cart!');
   } catch (error) {
     res.status(500).send('An unknown error occured');
@@ -73,27 +76,14 @@ router.post('/removeCartRegItem/:id', async (req, res) => {
   }
 });
 
-// route to remove bid item from cart
-router.post('/removeCartBidItem/:id', async (req, res) => {
-  try {
-    const item = await ItemBid.findById(req.params.id);
-    await User.findOneAndUpdate(
-      { email: req.session.email },
-      { $pull: { shoppingCart: item }});
-    res.status(200).send('Bid listing removed successfully from cart!');
-  } catch (error) {
-    res.status(500).send('An unknown error occured');
-    throw new Error('Error with removing bid item from cart');
-  }
-});
-
 // route to get users shopping cart
 router.get('/cart', async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.session.email });
-    res.status(200).json(user.shoppingCart);
+    const cart = await ItemRegular.find({ _id: { $in: user.shoppingCart } });
+    res.status(200).json(cart);
   } catch (error) {
-    next(new Error('Error with retrieving listing'));
+    next(new Error('Error with retrieving cart'));
   }
 });
 
@@ -101,9 +91,10 @@ router.get('/cart', async (req, res, next) => {
 router.post('/addWatchRegItem/:id', async (req, res) => {
   try {
     const item = await ItemRegular.findById(req.params.id);
-    const user = await User.findOne({ email: req.session.email });
-    user.watchlistRegular.push(item);
-    await User.updateOne({ email: req.session.email }, { watchlistRegular: user.watchlistRegular });
+    await User.findOneAndUpdate(
+      { email: req.session.email, 
+        'shoppingCart._id': { $ne: req.params.id }},
+      { $addToSet: { watchlistRegular: item }});
     res.status(200).send('Regular listing successfully added to watchlist!');
   } catch (error) {
     res.status(500).send('An unknown error occured');
@@ -115,9 +106,10 @@ router.post('/addWatchRegItem/:id', async (req, res) => {
 router.post('/addWatchBidItem/:id', async (req, res) => {
   try {
     const item = await ItemBid.findById(req.params.id);
-    const user = await User.findOne({ email: req.session.email });
-    user.watchlistBid.push(item);
-    await User.updateOne({ email: req.session.email }, { watchlistBid: user.watchlistBid });
+    await User.findOneAndUpdate(
+      { email: req.session.email, 
+        'shoppingCart._id': { $ne: req.params.id }},
+      { $addToSet: { watchlistBid: item }});
     res.status(200).send('Bid listing successfully added to watchlist!');
   } catch (error) {
     res.status(500).send('An unknown error occured');
@@ -153,38 +145,83 @@ router.post('/removeWatchRegItem/:id', async (req, res) => {
   }
 });
 
+// route to add bid to bidhistory
+router.post('/addBid/:id', async (req, res) => {
+  const { bid } = req.body;
+  const { session } = req;
+  const { name } = session;
+  try {
+    await ItemBid.findOneAndUpdate(
+      { _id: req.params.id },
+      { price: bid, $addToSet: { bidHistory: { bidAmount: bid, bidderName: name } } },
+    );
+    res.status(200).send('Bid placed successfully');
+  } catch (error) {
+    res.status(500).send('An unknown error occured');
+    throw new Error('Error with adding bid to item');
+  }
+});
 
 // route to handle Regular transactions
 router.post('/regTransaction', async (req, res) => {
-  const { seller, listingRegular, totalCost } = req.body;
+  const {
+    sellerName, listingRegular, totalCost, info,
+  } = req.body;
   try {
+    const sellerUser = await User.findOne({ name: sellerName });
+    const buyerUser = await User.findOne({ email: req.session.email });
     const transaction = await Transaction.create({
-      seller,
-      buyer: req.session._id,
+      seller: sellerUser.name,
+      buyer: buyerUser.name,
       listingRegular,
       totalCost,
+      info,
     });
-    res.status(201).send(`The transaction was done successfully: ${transaction}`);
+    res.status(201).json(transaction);
   } catch (error) {
     throw new Error('Error with completing transaction');
   }
 });
 
 // route to handle Bid transactions
-router.post('/bidTransaction', async (req, res) => {
-  const { seller, listingBid, totalCost } = req.body;
+// router.post('/bidTransaction', async (req, res) => {
+//   const {
+//     sellerName, listingBid, totalCost, info,
+//   } = req.body;
+//   try {
+//     const sellerUser = await User.findOne({ name: sellerName });
+//     const buyerUser = await User.findOne({ email: req.session.email });
+//     const transaction = await Transaction.create({
+//       seller: sellerUser._id,
+//       buyer: buyerUser._id,
+//       listingBid,
+//       totalCost,
+//       info,
+//     });
+//     res.status(201).json(transaction);
+//   } catch (error) {
+//     throw new Error('Error with completing transaction');
+//   }
+// });
+
+// route to handle adding transaction to buyer's account
+// and seller's account WHEN buying regular items
+router.post('/addTransaction', async (req, res) => {
+  const { transaction } = req.body;
   try {
-    const transaction = await Transaction.create({
-      seller,
-      buyer: req.session._id,
-      listingBid,
-      totalCost,
-    });
-    res.status(201).send(`The transaction was done successfully: ${transaction}`);
+    await User.findOneAndUpdate(
+      { email: req.session.email },
+      { $addToSet: { transactionHistory: transaction } },
+    );
+    await User.findOneAndUpdate(
+      { name: transaction.seller },
+      { $addToSet: { transactionHistory: transaction } },
+    );
+    await ItemRegular.findByIdAndDelete(transaction.listingRegular._id);
+    res.status(200).send('Regular listing successfully added to watchlist!');
   } catch (error) {
-    throw new Error('Error with completing transaction');
+    throw new Error('Error with completeing transaction');
   }
 });
-
 
 module.exports = router;

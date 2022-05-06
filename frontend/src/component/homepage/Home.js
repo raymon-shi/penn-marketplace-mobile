@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
 const Home = ({ navigation }) => {
   const [regListings, setRegListings] = useState([]);
   const [bidListings, setBidListings] = useState([]);
-  const [savedListings, setSavedListings] = useState([]);
+  const [savedRegListings, setSavedRegListings] = useState([]);
+  const [savedBidListings, setSavedBidListings] = useState([]);
 
   const renderItem = ({ item }) => {
     if (item.media && item.media !== '') {
@@ -61,7 +62,7 @@ const Home = ({ navigation }) => {
         <View style={styles.carouselSlide}>
           <TouchableOpacity
             // eslint-disable-next-line no-underscore-dangle
-            onPress={() => navigation.navigate('Item', { itemId: item._id })}
+            onPress={() => navigation.navigate('RegItem', { itemId: item._id, posterName: item.posterName })}
             style={{
               flex: 1, width: '100%', height: '100%', alignContent: 'center', justifyContent: 'center'
             }}
@@ -79,7 +80,7 @@ const Home = ({ navigation }) => {
     return (
       <TouchableOpacity
       // eslint-disable-next-line no-underscore-dangle
-        onPress={() => navigation.navigate('Item', { itemId: item._id })}
+        onPress={() => navigation.navigate('RegItem', { itemId: item._id, posterName: item.posterName })}
         style={{
           flex: 1, width: '100%', height: '100%', alignContent: 'center', justifyContent: 'center'
         }}
@@ -98,7 +99,7 @@ const Home = ({ navigation }) => {
         <View style={styles.carouselSlide}>
           <TouchableOpacity
             // eslint-disable-next-line no-underscore-dangle
-            onPress={() => navigation.navigate('Item', { itemId: item._id })}
+            onPress={() => navigation.navigate('BidItem', { itemId: item._id, posterName: item.posterName })}
             style={{
               flex: 1, width: '100%', height: '100%', alignContent: 'center', justifyContent: 'center'
             }}
@@ -116,7 +117,7 @@ const Home = ({ navigation }) => {
     return (
       <TouchableOpacity
         // eslint-disable-next-line no-underscore-dangle
-        onPress={() => navigation.navigate('Item', { itemId: item._id })}
+        onPress={() => navigation.navigate('BidItem', { itemId: item._id, posterName: item.posterName })}
         style={{
           flex: 1, width: '100%', height: '100%', alignContent: 'center', justifyContent: 'center'
         }}
@@ -161,9 +162,36 @@ const Home = ({ navigation }) => {
     }
   };
 
+  const getSavedRegListings = async () => {
+    try {
+      const savedReg = await axios.get(`${serverURL}/item/getSavedReg`);
+      setSavedRegListings(savedReg.data);
+    } catch (err) {
+      console.log('Error in retrieving saved reg listings');
+    }
+  };
+
+  const getSavedBidListings = async () => {
+    try {
+      const savedBid = await axios.get(`${serverURL}/item/getSavedBid`);
+      setSavedBidListings(savedBid.data);
+    } catch (err) {
+      console.log('Error in retrieving saved bid listings');
+    }
+  };
+
   useEffect(() => {
     getRegListings();
     getBidListings();
+    getSavedRegListings();
+    getSavedBidListings();
+    const intervalID = setInterval(() => {
+      getRegListings();
+      getBidListings();
+      getSavedRegListings();
+      getSavedBidListings();
+    }, 15000);
+    return () => clearInterval(intervalID);
   }, []);
 
   return (
@@ -207,12 +235,31 @@ const Home = ({ navigation }) => {
           </View>
         </View>
 
-        <View style={{ marginBottom: 10 }}>
-          <Heading size="lg" style={styles.titleColor}>Saved Listings</Heading>
+        <View>
+          <Heading size="lg" style={styles.titleColor}>Saved Regular Listings</Heading>
           <View style={styles.carouselWrapper}>
             <Carousel
-              data={items}
-              renderItem={renderSavedItem}
+              data={savedRegListings}
+              renderItem={renderItem}
+              sliderWidth={400}
+              itemWidth={150}
+              enableMomentum={false}
+              lockScrollWhileSnapping
+              autoplay
+              useScrollView
+              loop
+              autoplayInterval={5000}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
+        </View>
+
+        <View style={{ marginBottom: 10 }}>
+          <Heading size="lg" style={styles.titleColor}>Saved Bid Listings</Heading>
+          <View style={styles.carouselWrapper}>
+            <Carousel
+              data={savedBidListings}
+              renderItem={renderBidItem}
               sliderWidth={400}
               itemWidth={150}
               enableMomentum={false}
