@@ -18,7 +18,6 @@ import Reviews from './src/component/account/Reviews';
 import Follows from './src/component/account/Follows';
 import Blocked from './src/component/account/Blocked';
 import SearchUsers from './src/component/account/SearchUsers';
-import Item from './src/component/buyer/item/Item';
 import BidItem from './src/component/buyer/item/BidItem';
 import RegItem from './src/component/buyer/item/RegItem';
 import Home from './src/component/homepage/Home';
@@ -30,40 +29,11 @@ const App = () => {
   const navigationRef = React.createRef();
 
   return (
-<<<<<<< HEAD
-    <NativeBaseProvider>
-      <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator
-          initialRouteName="Account"
-          screenOptions={{
-            // eslint-disable-next-line react/no-unstable-nested-components
-            header: ({ navigation }) => <Header />,
-          }}
-        >
-          {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="Reviews" component={Reviews} />
-          <Stack.Screen name="Follows" component={Follows} />
-          <Stack.Screen name="Blocked" component={Blocked} />
-          <Stack.Screen name="SearchUsers" component={SearchUsers} />
-          <Stack.Screen name="Account" component={Account} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Search" component={Search} />
-          <Stack.Screen name="Seller" component={Seller} />
-          <Stack.Screen name="Cart" component={Cart} />
-          <Stack.Screen name="Checkout" component={Checkout} />
-          <Stack.Screen name="Item" component={Item} />
-        </Stack.Navigator>
-        <BottomRow navigationRef={navigationRef} />
-      </NavigationContainer>
-    </NativeBaseProvider>
-=======
     <SSRProvider>
       <NativeBaseProvider>
         <NavigationContainer ref={navigationRef}>
           <Stack.Navigator
-            initialRouteName="Home"
+            initialRouteName="Account"
             screenOptions={{
               // eslint-disable-next-line react/no-unstable-nested-components
               header: ({ navigation }) => <Header />,
@@ -74,6 +44,7 @@ const App = () => {
             <Stack.Screen name="Reviews" component={Reviews} />
             <Stack.Screen name="Follows" component={Follows} />
             <Stack.Screen name="Blocked" component={Blocked} />
+            <Stack.Screen name="SearchUsers" component={SearchUsers} />
             <Stack.Screen name="Account" component={Account} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} />
@@ -89,7 +60,6 @@ const App = () => {
         </NavigationContainer>
       </NativeBaseProvider >
     </SSRProvider>
->>>>>>> main
   );
 };
 
