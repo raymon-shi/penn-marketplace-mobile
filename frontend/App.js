@@ -29,7 +29,7 @@ const App = () => {
     <NativeBaseProvider>
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
-          initialRouteName="Home"
+          initialRouteName="Account"
           screenOptions={{
             // eslint-disable-next-line react/no-unstable-nested-components
             header: ({ navigation }) => <Header />,

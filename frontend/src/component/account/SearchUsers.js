@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
-  StyleSheet, Button, Text, View, TextInput, FlatList, Modal,
+  StyleSheet, Button, Text, View, TextInput, FlatList, Modal, Platform, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -21,49 +21,34 @@ const styles = StyleSheet.create({
   },
   inline: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   modal: {
     margin: 10,
-  }
+  },
+  reportBox: {
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  tableRow: {
+    padding: 2,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });
 
 const SearchUsers = ({ route, navigation }) => {
   const { userProfile } = route.params;
   const [searchValue, setSearchValue] = useState('');
+  const [reportContent, setReportContent] = useState('');
   const selectedUser = useRef({});
   const alreadyDone = useRef(false);
-  const reportContent = useRef();
   const [matchedUsers, setMatchedUsers] = useState([]);
   const [showReport, setShowReport] = useState(false);
   const [showFollow, setShowFollow] = useState(false);
   const [showBlock, setShowBlock] = useState(false);
   // const socket = useContext(SocketContext);
-
-  async function handleFollow(e) {
-    selectedUser.current = matchedUsers[e.target.value];
-    alreadyDone.current = false;
-    for (let i = 0; i < userProfile.following.length; i += 1) {
-      if (userProfile.following[i].followingEmail === selectedUser.current.email) {
-        alreadyDone.current = true;
-        break;
-      }
-    }
-    if (!alreadyDone.current) {
-      try {
-        // socket.emit('new follow', selectedUser.current.name);
-        await axios.post(`${serverURL}/account/follow`, {
-          follower: userProfile,
-          followedUser: selectedUser.current,
-        });
-        userProfile.following.push({ followingEmail: selectedUser.current.email });
-      } catch (error) {
-        // let's not throw errors in the frontend!
-        throw new Error('Error following user.');
-      }
-    }
-    setShowFollow(true);
-  }
 
   async function handleBlock(e) {
     selectedUser.current = matchedUsers[e.target.value];
@@ -88,62 +73,132 @@ const SearchUsers = ({ route, navigation }) => {
     setShowBlock(true);
   }
 
-  async function reportUser() {
-    if (!reportContent.current) {
-      throw new Error('You must type a reason for reporting this user.');
-    }
-    try {
-      const response = await axios.post(
-        'localhost:8000/account/postReport',
-        {
-          recipient: selectedUser.current, reportContent: reportContent.current.value,
-        },
-      );
-      if (response.status === 200) {
-        setShowReport(false);
-      }
-    } catch (error) {
-      throw new Error('Error reporting user.');
-    }
-  }
-
   function findAverageRating(reviews) {
     const sum = reviews.reduce((acc, curr) => acc + Number(curr.reviewRating), 0);
     return sum / reviews.length;
   }
 
-  const matchedUsersResults = (matchedUser) => {
-    return (
-    <View style={styles.inline}>
+  const matchedUsersResults = (matchedUser) => (
+    <View style={styles.tableRow}>
       <Text>{matchedUser.item.name} - {findAverageRating(matchedUser.item.reviews)} stars</Text>
-      <Button
-        title="Report"
-        onPress={async () => {
-          try {
-            const { data } = await axios.post(`${serverURL}/account/findUserOnEmail`, { email: matchedUser.item.email });
-            const user = data[0];
-            selectedUser.current = user;
-          } catch (error) {
-            throw new Error('Error finding user on email.');
-          }
-          alreadyDone.current = false;
-          for (let i = 0; i < selectedUser.current.reports.length; i += 1) {
-            if (selectedUser.current.reports[i].authorEmail === userProfile.email) {
-              alreadyDone.current = true;
-              break;
+      <View style={styles.inline}>
+        <Button
+          title="Report"
+          onPress={async () => {
+            try {
+              const { data } = await axios.post(`${serverURL}/account/findUserOnEmail`, { email: matchedUser.item.email });
+              const user = data[0];
+              selectedUser.current = user;
+            } catch (error) {
+              throw new Error('Error finding user on email.');
             }
-          }
-          setShowReport(true);
-        }}
-      />
+            alreadyDone.current = false;
+            for (let i = 0; i < selectedUser.current.reports.length; i += 1) {
+              if (selectedUser.current.reports[i].authorEmail === userProfile.email) {
+                alreadyDone.current = true;
+                break;
+              }
+            }
+            setShowReport(true);
+          }}
+        />
+        <Button
+          title="Follow"
+          onPress={async () => {
+            selectedUser.current = matchedUser.item;
+            alreadyDone.current = false;
+            for (let i = 0; i < userProfile.following.length; i += 1) {
+              if (userProfile.following[i].followingEmail === selectedUser.current.email) {
+                alreadyDone.current = true;
+                break;
+              }
+            }
+            if (!alreadyDone.current) {
+              try {
+                // socket.emit('new follow', selectedUser.current.name);
+                await axios.post(`${serverURL}/account/follow`, {
+                  follower: userProfile,
+                  followedUser: selectedUser.current,
+                });
+                userProfile.following.push({ followingEmail: selectedUser.current.email });
+                Alert.alert(
+                  'Success.',
+                  `You are now following ${selectedUser.current.name}.`,
+                  [
+                    {
+                      text: 'Close',
+                    },
+                  ],
+                );
+              } catch (error) {
+                // let's not throw errors in the frontend!
+                throw new Error('Error following user.');
+              }
+            } else {
+              Alert.alert(
+                null,
+                `You have already followed ${selectedUser.current.name}.`,
+                [
+                  {
+                    text: 'Close',
+                  },
+                ],
+              );
+            }
+          }}
+        />
+        <Button
+          title="Block"
+          onPress={async () => {
+            selectedUser.current = matchedUser.item;
+            alreadyDone.current = false;
+            for (let i = 0; i < userProfile.blocked.length; i += 1) {
+              if (userProfile.blocked[i].blockedUserEmail === selectedUser.current.email) {
+                alreadyDone.current = true;
+                break;
+              }
+            }
+            if (!alreadyDone.current) {
+              try {
+                await axios.post(`${serverURL}/account/block`, {
+                  blocker: userProfile,
+                  blockedUser: selectedUser.current,
+                });
+                userProfile.blocked.push({ blockedUserEmail: selectedUser.current.email });
+                Alert.alert(
+                  'Success.',
+                  `You have blocked ${selectedUser.current.name}. You will no longer see any listings or receive any messages from them.`,
+                  [
+                    {
+                      text: 'Close',
+                    },
+                  ],
+                );
+              } catch (error) {
+                throw new Error('Error blocking user.');
+              }
+            } else {
+              Alert.alert(
+                'Success.',
+                `You already blocked ${selectedUser.current}.`,
+                [
+                  {
+                    text: 'Close',
+                  },
+                ],
+              );
+            }
+          }}
+        />
+      </View>
       {/* <div className="table-item">
         <button type="button" value={index} onClick={handleFollow}>Follow</button>
       </div>
       <div className="table-item">
         <button type="button" value={index} onClick={handleBlock}>Block</button>
       </div> */}
-    </View>);
-  };
+    </View>
+  );
 
   return (
     <SafeAreaView>
@@ -185,20 +240,60 @@ const SearchUsers = ({ route, navigation }) => {
         transparent={false}
         visible={showReport}
         presentationStyle="pageSheet"
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
       >
         <SafeAreaView>
           <View style={styles.modal}>
-            {alreadyDone.current ? `You have already reported ${selectedUser.current.name}.`
-                : (
-                  <>
-                    <Text>Write your report for this user.</Text>
-                    <TextInput style={styles.inputStyle}/>
-                  </>
-                )}
-          </View> 
+            {alreadyDone.current
+              ? (
+                <>
+                  <Text>You have already reported {selectedUser.current.name}.</Text>
+                  <Button title="Close" color="black" onPress={() => setShowReport(false)} />
+                </>
+              )
+              : (
+                <>
+                  <Text>Write your report for this {selectedUser.current.name}.</Text>
+                  <TextInput
+                    style={styles.inputStyle}
+                    // eslint-disable-next-line react/jsx-boolean-value
+                    multiline={true}
+                    onChangeText={(newText) => setReportContent(newText)}
+                  />
+                  <View style={styles.inline}>
+                    <Button
+                      title="Cancel"
+                      color="black"
+                      onPress={() => {
+                        setReportContent('');
+                        setShowReport(false);
+                      }}
+                    />
+                    <Button
+                      title="Report"
+                      color="red"
+                      onPress={async () => {
+                        if (!reportContent) {
+                          throw new Error('You must type a reason for reporting this user.');
+                        }
+                        try {
+                          const response = await axios.post(
+                            `${serverURL}/account/postReport`,
+                            {
+                              recipient: selectedUser.current, reportContent,
+                            },
+                          );
+                          if (response.status === 200) {
+                            setShowReport(false);
+                          }
+                        } catch (error) {
+                          throw new Error('Error reporting user.');
+                        }
+                      }}
+                    />
+                  </View>
+                </>
+              )}
+          </View>
         </SafeAreaView>
       </Modal>
       {/* <Modal show={showFollow} onHide={() => { setShowFollow(false); }} backdrop="static" keyboard={false}>
