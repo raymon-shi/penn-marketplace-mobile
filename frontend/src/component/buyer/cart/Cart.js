@@ -57,26 +57,13 @@ const styles = StyleSheet.create({
     margin: 10,
     alignSelf: 'center',
   },
+  removeBtn: {
+    backgroundColor: 'black',
+    borderRadius: 10,
+    marginTop: 5,
+    padding: 5,
+  }
 });
-
-const Item = ({
-  title, price, lister, image,
-}) => (
-  <View style={styles.item}>
-    <View style={styles.infoContainer}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.price}>${price}</Text>
-      <Text style={styles.lister}>Seller: {lister}</Text>
-    </View>
-    <View style={styles.imageContainer}>
-      {image && image !== '' ?      
-      <Image
-        style={styles.image}
-        source={{ uri: `${serverURL}\\${image}`.replaceAll('\\', '/') }}
-      />: null}
-    </View>
-  </View>
-);
 
 const Cart = ({ navigation }) => {
   const [cart, setCart] = useState([]);
@@ -90,9 +77,42 @@ const Cart = ({ navigation }) => {
     }
   };
 
+  const handleRemoveReg = async (id) => {
+    try {
+      await axios.post(`${serverURL}/buyer/removeCartRegItem/${id}`);
+      getCart();
+    } catch (error) {
+      throw new Error(`Error with removing item with id:${id} from cart`);
+    }
+  };
+
   useEffect(() => {
     getCart();
   }, []);
+
+  const Item = ({
+    title, price, lister, image, itemId
+  }) => (
+    <View style={styles.item}>
+      <View style={styles.infoContainer}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.price}>${price}</Text>
+        <Text style={styles.lister}>Seller: {lister}</Text>
+        <Pressable
+        style={styles.removeBtn}
+        onPress={() => handleRemoveReg(itemId)}>
+          <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold' }}>Remove from Cart</Text>
+        </Pressable>
+      </View>
+      <View style={styles.imageContainer}>
+        {image && image !== '' ?      
+        <Image
+          style={styles.image}
+          source={{ uri: `${serverURL}\\${image}`.replaceAll('\\', '/') }}
+        />: null}
+      </View>
+    </View>
+  );
 
   const handleCheckout = (e) => {
     e.preventDefault();
@@ -111,6 +131,7 @@ const Cart = ({ navigation }) => {
       price={item.price}
       lister={item.posterName}
       image={item.media}
+      itemId={item._id}
     />
   );
 
