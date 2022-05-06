@@ -11,6 +11,7 @@ import Seller from './src/component/seller/Seller';
 import Search from './src/component/search/Search';
 import Cart from './src/component/buyer/cart/Cart';
 import ItemCheckout from './src/component/buyer/checkout/ItemCheckout';
+import CartCheckout from './src/component/buyer/checkout/CartCheckout';
 import Account from './src/component/account/Account';
 import Profile from './src/component/account/Profile';
 import Reviews from './src/component/account/Reviews';
@@ -49,6 +50,7 @@ const App = () => {
             <Stack.Screen name="Seller" component={Seller} />
             <Stack.Screen name="Cart" component={Cart} />
             <Stack.Screen name="ItemCheckout" component={ItemCheckout} />
+            <Stack.Screen name="CartCheckout" component={CartCheckout} />
             <Stack.Screen name="BidItem" component={BidItem} />
             <Stack.Screen name="RegItem" component={RegItem} />
           </Stack.Navigator>

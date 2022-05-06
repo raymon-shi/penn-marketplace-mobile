@@ -19,7 +19,6 @@ router.post('/acceptBid', async (req, res) => {
       buyer: buyerUser.name,
       listingBid,
       totalCost,
-      // info,
     });
     res.status(201).json(transaction);
   } catch (error) {
@@ -40,7 +39,7 @@ router.post('/addTransaction', async (req, res) => {
       { $addToSet: { transactionHistory: transaction } },
     );
     await ItemBid.findByIdAndDelete(transaction.listingBid._id);
-    res.status(200).send('Regular listing successfully added to watchlist!');
+    res.status(200).send('Transaction sucessfully added!');
   } catch (error) {
     throw new Error('Error with completeing transaction');
   }

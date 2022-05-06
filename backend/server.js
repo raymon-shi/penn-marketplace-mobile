@@ -63,6 +63,7 @@ const accountRouter = require('./routes/account');
 const itemRouter = require('./routes/item');
 const buyerRouter = require('./routes/buyer');
 const chatRouter = require('./routes/chat');
+const sellerRouter = require('./routes/seller');
 
 // makes userUploads public
 app.use('/userUploads', express.static('userUploads'));
@@ -89,6 +90,7 @@ app.use('/account', accountRouter);
 app.use('/item', itemRouter);
 app.use('/buyer', buyerRouter);
 app.use('/chat', chatRouter);
+app.use('/seller', sellerRouter);
 
 // default error handling
 app.use((err, req, res, next) => {

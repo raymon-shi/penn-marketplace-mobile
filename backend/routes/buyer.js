@@ -183,27 +183,6 @@ router.post('/regTransaction', async (req, res) => {
   }
 });
 
-// route to handle Bid transactions
-// router.post('/bidTransaction', async (req, res) => {
-//   const {
-//     sellerName, listingBid, totalCost, info,
-//   } = req.body;
-//   try {
-//     const sellerUser = await User.findOne({ name: sellerName });
-//     const buyerUser = await User.findOne({ email: req.session.email });
-//     const transaction = await Transaction.create({
-//       seller: sellerUser._id,
-//       buyer: buyerUser._id,
-//       listingBid,
-//       totalCost,
-//       info,
-//     });
-//     res.status(201).json(transaction);
-//   } catch (error) {
-//     throw new Error('Error with completing transaction');
-//   }
-// });
-
 // route to handle adding transaction to buyer's account
 // and seller's account WHEN buying regular items
 router.post('/addTransaction', async (req, res) => {
@@ -211,7 +190,9 @@ router.post('/addTransaction', async (req, res) => {
   try {
     await User.findOneAndUpdate(
       { email: req.session.email },
-      { $addToSet: { transactionHistory: transaction } },
+      { $addToSet: { transactionHistory: transaction },
+        $pull: { shoppingCart: transaction.listingRegular._id },
+      },
     );
     await User.findOneAndUpdate(
       { name: transaction.seller },

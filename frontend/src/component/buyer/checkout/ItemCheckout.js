@@ -87,36 +87,38 @@ const ItemCheckout = ({ route, navigation }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const name = `${first} ${last}`;
-    const info = {
-      name,
-      num,
-      exp,
-      cvc,
-      first,
-      last,
-    };
-    try {
-      if (listing.bidHistory) {
-        // add bid to listing -> create transaction -> add transaction to user history
-        await axios.post(`${serverURL}/buyer/addBid/${listing._id}`, { bid });
-        navigation.navigate('Home');
-      } else {
-        // create reg item transaction -> add transaction to user history
-        const purchase = await axios.post(
-          `${serverURL}/buyer/regTransaction`,
-          {
-            sellerName: listing.posterName,
-            listingRegular: listing,
-            totalCost: listing.price,
-            info,
-          },
-        );
-        await axios.post(`${serverURL}/buyer/addTransaction`, { transaction: purchase.data });
-        navigation.navigate('Home');
+    if (num !== '' && exp !== '' && cvc !== '' && first !== '' && last !== '') {
+      const name = `${first} ${last}`;
+      const info = {
+        name,
+        num,
+        exp,
+        cvc,
+        first,
+        last,
+      };
+      try {
+        if (isBidItem) {
+          // add bid to listing -> create transaction -> add transaction to user history
+          await axios.post(`${serverURL}/buyer/addBid/${listing._id}`, { bid });
+          navigation.navigate('Home');
+        } else {
+          // create reg item transaction -> add transaction to user history
+          const purchase = await axios.post(
+            `${serverURL}/buyer/regTransaction`,
+            {
+              sellerName: listing.posterName,
+              listingRegular: listing,
+              totalCost: listing.price,
+              info,
+            },
+          );
+          await axios.post(`${serverURL}/buyer/addTransaction`, { transaction: purchase.data });
+          navigation.navigate('Home');
+        }
+      } catch (error) {
+        Error('Problem with completeing transaction');
       }
-    } catch (error) {
-      Error('Problem with completeing transaction');
     }
   };
 
@@ -180,12 +182,11 @@ const ItemCheckout = ({ route, navigation }) => {
         </View>
         <View style={{ flex: 1}}>
          <Text style={styles.price}>
-            Total: ${listing.price}
+            Total: ${total}
           </Text>
           <Pressable
             style={styles.buyBtn}
             onPress={(e) => handleSubmit(e)}
-            disabled={false}
             >
             <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold' }}>{isBidItem ? 'Confirm Bid' : 'Confirm and Pay'}</Text>
           </Pressable> 
