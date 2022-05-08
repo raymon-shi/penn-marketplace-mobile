@@ -14,6 +14,7 @@ const upload = multer({ storage });
 
 const ItemRegular = require('../models/ItemRegular');
 const ItemBid = require('../models/ItemBid');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -59,14 +60,36 @@ router.get('/getBidListings', async (req, res, next) => {
   }
 });
 
+// route to get users saved reg listings
+router.get('/getSavedReg', async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.session.email });
+    const saved = await ItemRegular.find({ _id: { $in: user.watchlistRegular }});
+    res.status(200).json(saved);
+  } catch (error) {
+    next(new Error('Error with retrieving watchlist'));
+  }
+});
+
+// route to retrieve saved bid listings
+router.get('/getSavedBid', async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.session.email });
+    const saved = await ItemBid.find({ _id: { $in: user.watchlistBid }});
+    res.status(200).json(saved);
+  } catch (error) {
+    next(new Error('Error with retrieving watchlist'));
+  }
+});
+
 // route to list a regular listing
 router.post('/addRegListing', async (req, res, next) => {
   const {
-    product, productDescr, price, tag, name,
+    product, productDescr, price, tag,
   } = req.body;
   try {
     await ItemRegular.create({
-      posterName: req.session.name || name,
+      posterName: req.session.name,
       itemName: product,
       itemDescr: productDescr,
       price,
@@ -80,13 +103,13 @@ router.post('/addRegListing', async (req, res, next) => {
 
 // route to list a regular listing with picture
 // upload.single is a middleware to process imageFile, access the file details using req.file
-router.post('/addRegListingPic', upload.single('image'), async (req, res, next) => {
+router.post('/addRegListingPic', upload.single('imageFile'), async (req, res, next) => {
   const {
-    product, productDescr, price, tag, name,
+    product, productDescr, price, tag,
   } = req.body;
   try {
     await ItemRegular.create({
-      posterName: req.session.name || name,
+      posterName: req.session.name,
       itemName: product,
       itemDescr: productDescr,
       media: req.file.path,
@@ -102,11 +125,11 @@ router.post('/addRegListingPic', upload.single('image'), async (req, res, next) 
 // route to list a bid listing
 router.post('/addBidListing', async (req, res, next) => {
   const {
-    product, productDescr, tag, name,
+    product, productDescr, tag,
   } = req.body;
   try {
     await ItemBid.create({
-      posterName: req.session.name || name,
+      posterName: req.session.name,
       itemName: product,
       itemDescr: productDescr,
       price: 0,
@@ -119,13 +142,13 @@ router.post('/addBidListing', async (req, res, next) => {
 });
 
 // route to list a bid listing with picture
-router.post('/addBidListingPic', upload.single('image'), async (req, res, next) => {
+router.post('/addBidListingPic', upload.single('imageFile'), async (req, res, next) => {
   const {
-    product, productDescr, tag, name,
+    product, productDescr, tag,
   } = req.body;
   try {
     await ItemBid.create({
-      posterName: req.session.name || name,
+      posterName: req.session.name,
       itemName: product,
       itemDescr: productDescr,
       media: req.file.path,

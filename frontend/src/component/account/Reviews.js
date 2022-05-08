@@ -34,28 +34,42 @@ const Reviews = ({ route, navigation }) => {
     <View style={styles.listItem}>
       <View style={{ flexDirection: 'row' }}>
         <View style={{ flexDirection: 'row' }}>
-          {generateRatingComponent(review.item.stars)}
+          {generateRatingComponent(review.item.reviewRating)}
         </View>
         <Text style={{ marginLeft: '1%' }}>
-          {review.item.name}
+          {review.item.authorName}
         </Text>
       </View>
       <View>
         <Text>
-          {review.item.review}
+          {review.item.reviewContent}
         </Text>
       </View>
     </View>
   );
 
+  function findAverageRating() {
+    const sum = route.params.reviews.reduce((acc, curr) => acc + Number(curr.reviewRating), 0);
+    return sum / route.params.reviews.length;
+  }
+
   return (
     <SafeAreaView>
       <AccountHeader page="Reviews" navigation={navigation} />
-      <FlatList
-        data={route.params.reviews}
-        renderItem={reviewsList}
-        keyExtractor={(item) => item.pennID}
-      />
+      {route.params.reviews.length === 0
+        ? <Text>You have no reviews.</Text>
+        : (
+          <View>
+            <Text>
+              Average Rating - {findAverageRating()} stars
+            </Text>
+            <FlatList
+              data={route.params.reviews}
+              renderItem={reviewsList}
+              keyExtractor={(item) => item.email}
+            />
+          </View>
+        )}
     </SafeAreaView>
   );
 };

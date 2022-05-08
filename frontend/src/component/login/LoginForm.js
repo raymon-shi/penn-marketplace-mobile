@@ -57,8 +57,6 @@ const LoginForm = ({ navigation }) => {
     try {
       await axios.post(`${serverURL}/account/login`, { email, password }).then(() => navigation.navigate('Home'));
       await storeLoginData();
-
-      console.log('hello world?');
     } catch (error) {
       console.log('error!');
       console.log(error);

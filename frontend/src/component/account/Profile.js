@@ -19,31 +19,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: '1%',
   },
-  editBtn: {
-    backgroundColor: '#011f5b',
-    borderRadius: 5,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
 });
 
 const Profile = ({ route, navigation }) => (
   <SafeAreaView>
     <AccountHeader page="Profile" navigation={navigation} />
-    <View style={{ flexDirection: 'row', margin: '1%' }}>
-      <Image style={styles.image} source={ExclamationIcon} />
-      <Text style={{ marginLeft: '2%' }}>
-        3 other users have reported you.
-      </Text>
-    </View>
+    {route.params.user.reports.length === 0 ? null
+      : (
+        <View style={{ flexDirection: 'row', margin: '1%' }}>
+          <Image style={styles.image} source={ExclamationIcon} />
+          <Text style={{ marginLeft: '2%' }}>
+            {route.params.user.reports.length} other users have reported you.
+          </Text>
+        </View>
+      )}
     <View style={styles.profileBox}>
       <View style={{ flexDirection: 'row', margin: '1%' }}>
         <Text style={{ width: '40%' }}>Name</Text>
         <Text style={{ width: '40%' }}>{route.params.user.name}</Text>
-      </View>
-      <View style={{ flexDirection: 'row', margin: '1%' }}>
-        <Text style={{ width: '40%' }}>PennID</Text>
-        <Text style={{ width: '40%' }}>{route.params.user.pennID}</Text>
       </View>
       <View style={{ flexDirection: 'row', margin: '1%' }}>
         <Text style={{ width: '40%' }}>Email</Text>
@@ -53,13 +46,6 @@ const Profile = ({ route, navigation }) => (
         <Text style={{ width: '40%' }}>Dark Mode</Text>
         <Image source={DarkModeOffIcon} style={styles.image} />
       </View>
-    </View>
-    <View style={{ width: '20%', marginTop: '1%', marginLeft: '1%' }}>
-      <Pressable style={styles.editBtn}>
-        <Text style={{ color: 'white', padding: '3%' }}>
-          Edit
-        </Text>
-      </Pressable>
     </View>
   </SafeAreaView>
 );
