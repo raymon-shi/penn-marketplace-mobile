@@ -7,10 +7,10 @@ import Carousel from 'react-native-snap-carousel';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
-// const { manifest } = Constants;
+const { manifest } = Constants;
 
-// // send to correct server (different if web vs expo app)
-// const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
+// send to correct server (different if web vs expo app)
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   container: {
@@ -49,9 +49,8 @@ const styles = StyleSheet.create({
 const SearchResults = ({ navigation, route }) => {
   const [listings, setListings] = useState([]);
   const [bidListings, setBidListings] = useState([]);
-  const query = route.params.searchInput;
-  const filter = route.params.category;
-  console.log(query, filter);
+  const searchIn = route.params.searchInput;
+  const searchCat = route.params.category;
 
   const renderItem = ({ item }) => {
     if (item.media && item.media !== '') {
@@ -129,13 +128,11 @@ const SearchResults = ({ navigation, route }) => {
 
   const getRegListings = async () => {
     try {
-      const { data } = await axios.get(`${serverURL}/item/search`, {
-        query: route.params.searchInput,
-        label: route.params.category,
+      const { data } = await axios.post(`${serverURL}/item/search`, {
+        query: searchIn,
+        label: searchCat,
       });
-      if (data && data.length > 0) {
-        setListings(data.reverse());
-      }
+      setListings(data.reverse());
     } catch (err) {
       console.log('Error in retrieving regular listings');
     }
@@ -143,29 +140,26 @@ const SearchResults = ({ navigation, route }) => {
 
   const getBidListings = async () => {
     try {
-      const { data } = await axios.get(`${serverURL}/item/bidSearch`, {
-        query: route.params.searchInput,
-        label: route.params.category,
+      const { data } = await axios.post(`${serverURL}/item/bidSearch`, {
+        query: searchIn,
+        label: searchCat,
       });
-      if (data && data.length > 0) {
-        setBidListings(data.reverse());
-      }
+      setBidListings(data.reverse());
     } catch (err) {
       console.log('Error in retrieving bid listings');
     }
   };
 
   useEffect(() => {
-    console.log('hi');
     getRegListings();
     getBidListings();
-  }, []);
+  }, [searchIn, searchCat]);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
-          <Heading size="lg" style={styles.titleColor}>{listings.length} Regular listing results for &quot;{query}&quot;</Heading>
+          <Heading size="lg" style={styles.titleColor}>{listings.length} Regular listing results for &quot;{searchIn}&quot;</Heading>
           <View style={styles.carouselWrapper}>
             <Carousel
               data={listings}
@@ -184,7 +178,7 @@ const SearchResults = ({ navigation, route }) => {
         </View>
 
         <View>
-          <Heading size="lg" style={styles.titleColor}>{bidListings.length} Bid listing results for &quot;{query}&quot;</Heading>
+          <Heading size="lg" style={styles.titleColor}>{bidListings.length} Bid listing results for &quot;{searchIn}&quot;</Heading>
           <View style={styles.carouselWrapper}>
             <Carousel
               data={bidListings}
