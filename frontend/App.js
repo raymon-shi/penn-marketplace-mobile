@@ -31,7 +31,7 @@ const App = () => {
           initialRouteName="Home"
           screenOptions={{
             // eslint-disable-next-line react/no-unstable-nested-components
-            header: ({ navigation }) => <Header />,
+            header: ({ navigation }) => <Header navigation={navigation}/>,
           }}
         >
           {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}

@@ -4,7 +4,6 @@ import {
   Center, Input, Image, Heading, Button, Select, View, FormControl,
 } from 'native-base';
 import { StyleSheet } from 'react-native';
-import pennLogo from './assets/UniversityofPennsylvania_Shield_RGB.png';
 
 const styles = StyleSheet.create({
   searchBar: {
@@ -38,7 +37,7 @@ const SearchBar = ({ navigation }) => {
   return (
     <Center>
       <View navigation={navigation} style={styles.content}>
-        <Input w="200"placeholder="Explore the Penn Marketplace!" variant="filled" onChangeText={setQuery}/>
+        <Input w="200"placeholder="Explore the Penn Marketplace!" variant="filled" value={query} onChangeText={(setQuery)}/>
         <Select w="40" style={{ color: "white" }} variant="filled" selectedValue={filter} accessibilityLabel="All" placeholder="All" onValueChange={itemValue => setFilter(itemValue)}>
             <Select.Item label="All" value="" />
             <Select.Item label="Home" value="Home" />

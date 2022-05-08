@@ -49,6 +49,9 @@ const styles = StyleSheet.create({
 const SearchResults = ({ navigation, route }) => {
   const [listings, setListings] = useState([]);
   const [bidListings, setBidListings] = useState([]);
+  const query = route.params.searchInput;
+  const filter = route.params.category;
+  console.log(query, filter);
 
   const renderItem = ({ item }) => {
     if (item.media && item.media !== '') {
@@ -153,6 +156,7 @@ const SearchResults = ({ navigation, route }) => {
   };
 
   useEffect(() => {
+    console.log('hi');
     getRegListings();
     getBidListings();
   }, []);
