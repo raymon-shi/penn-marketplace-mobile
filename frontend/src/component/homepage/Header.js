@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Box, Input } from 'native-base';
 import BottomRow from '../search/BottomRow';
+import SearchBar from '../search/SearchBar';
 
 const styles = StyleSheet.create({
   searchBar: {
@@ -32,9 +33,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header = () => (
+const Header = ({ navigation }) => (
   <Box w="100%" style={styles.searchBar}>
-    <Input w="75%" placeholder="Explore the Penn Marketplace!" variant="filled" style={styles.inputStyle} />
+    <SearchBar navigation={navigation} />
   </Box>
 );
 
