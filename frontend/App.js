@@ -36,7 +36,7 @@ const App = () => {
             initialRouteName="Home"
             screenOptions={{
               // eslint-disable-next-line react/no-unstable-nested-components
-              header: ({ navigation }) => <Header />,
+              header: ({ navigation }) => <Header navigation={navigation} />,
             }}
           >
             {/* CHANGE THIS PART AND ADD YOUR SCREEN WHEN YOU HAVE COMPONENTS TO ADD! */}
@@ -48,7 +48,7 @@ const App = () => {
             <Stack.Screen name="Account" component={Account} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Search" component={Search} />
+            <Stack.Screen name="Results" component={SearchResults} />
             <Stack.Screen name="Seller" component={Seller} />
             <Stack.Screen name="Cart" component={Cart} />
             <Stack.Screen name="ItemCheckout" component={ItemCheckout} />
