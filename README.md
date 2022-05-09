@@ -9,7 +9,7 @@ A Penn exclusive marketplace where people within the community can buy and sell 
 3. [Project Folder Structure](#project-folder-structure)
 4. [How to Run the Project](#how-to-run-the-project)
 5. [Technologies](#technologies)
-6. [Mobile App](#mobile-app-version)
+6. [Web App](#web-app-version)
 7. [Credit](#credit)
 
 
