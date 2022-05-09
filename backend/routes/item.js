@@ -103,7 +103,7 @@ router.post('/addRegListing', async (req, res, next) => {
 
 // route to list a regular listing with picture
 // upload.single is a middleware to process imageFile, access the file details using req.file
-router.post('/addRegListingPic', upload.single('imageFile'), async (req, res, next) => {
+router.post('/addRegListingPic', upload.single('image'), async (req, res, next) => {
   const {
     product, productDescr, price, tag,
   } = req.body;
@@ -142,7 +142,7 @@ router.post('/addBidListing', async (req, res, next) => {
 });
 
 // route to list a bid listing with picture
-router.post('/addBidListingPic', upload.single('imageFile'), async (req, res, next) => {
+router.post('/addBidListingPic', upload.single('image'), async (req, res, next) => {
   const {
     product, productDescr, tag,
   } = req.body;

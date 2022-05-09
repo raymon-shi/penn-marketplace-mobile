@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 
 });
 
-const Seller = () => {
+const Seller = ({ navigation }) => {
   const [priceListing, setPriceListing] = useState(false);
   const [bidListing, setBidListing] = useState(false);
   const [successPage, setSuccessPage] = useState(false);
@@ -33,7 +33,7 @@ const Seller = () => {
         <BidListing onSubmit={() => { setBidListing(false); setSuccessPage(true); }} onBack={() => setBidListing(false)} />
       )}
 
-      {successPage && <Success onSubmit={() => setSuccessPage(false)} />}
+      {successPage && <Success onSubmit={() => setSuccessPage(false)} navigation={navigation} />}
     </View>
   );
 };

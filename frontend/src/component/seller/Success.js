@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Success = ({ onSubmit }) => (
+const Success = ({ onSubmit, navigation }) => (
   <View>
     <View style={styles.title}>
       <Heading style={styles.titleColor} size="2xl">Success! 🎉</Heading>
@@ -30,7 +30,7 @@ const Success = ({ onSubmit }) => (
     </View>
     <Center>
       <Button size="lg" w="50%" style={styles.redButton} onPress={onSubmit} _text={{ color: 'white' }}>List another item</Button>
-      <Button size="lg" w="50%" style={styles.blueButton} _text={{ color: 'white' }}>Return to Homepage</Button>
+      <Button size="lg" w="50%" style={styles.blueButton} _text={{ color: 'white' }} onPress={navigation.navigate('Home')}>Return to Homepage</Button>
     </Center>
   </View>
 );

@@ -209,7 +209,6 @@ const Home = ({ navigation }) => {
               lockScrollWhileSnapping
               autoplay
               useScrollView
-              loop
               autoplayInterval={5000}
               keyExtractor={(item, index) => index.toString()}
             />
@@ -228,7 +227,6 @@ const Home = ({ navigation }) => {
               lockScrollWhileSnapping
               autoplay
               useScrollView
-              loop
               autoplayInterval={5000}
               keyExtractor={(item, index) => index.toString()}
             />
@@ -247,7 +245,6 @@ const Home = ({ navigation }) => {
               lockScrollWhileSnapping
               autoplay
               useScrollView
-              loop
               autoplayInterval={5000}
               keyExtractor={(item, index) => index.toString()}
             />
@@ -266,7 +263,6 @@ const Home = ({ navigation }) => {
               lockScrollWhileSnapping
               autoplay
               useScrollView
-              loop
               autoplayInterval={5000}
               keyExtractor={(item, index) => index.toString()}
             />
