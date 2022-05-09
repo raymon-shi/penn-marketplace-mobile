@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import {
-  TextInput, View, Pressable, StyleSheet, Text, ScrollView, Image, SafeAreaView,
+  Platform, TextInput, View, Pressable, StyleSheet, Text, ScrollView, Image, SafeAreaView,
 } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';

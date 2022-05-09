@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import {
-  TextInput, View, FlatList, StyleSheet, Text, StatusBar, Image, Pressable,
+  Platform, TextInput, View, FlatList, StyleSheet, Text, StatusBar, Image, Pressable,
 } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
