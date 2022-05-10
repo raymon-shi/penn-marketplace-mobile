@@ -108,9 +108,8 @@ const BottomRow = ({ navigationRef }) => {
                 <Icon as={FontAwesome} style={styles.plusIcon} name="plus" size="8" />
               </Pressable>
             )}>
-            <Menu.Item onPress={() => navigationRef.current?.navigate('Seller')}>Sell</Menu.Item>
-            <Menu.Item onPress={() => navigationRef.current?.navigate('Item')}>Item</Menu.Item>
             <Menu.Item onPress={() => navigationRef.current?.navigate('Home')}>Home</Menu.Item>
+            <Menu.Item onPress={() => navigationRef.current?.navigate('Seller')}>Sell</Menu.Item>
             <Menu.Item
               onPress={() => {
                 setLoggedOutData();
@@ -118,7 +117,6 @@ const BottomRow = ({ navigationRef }) => {
               }}>
               Logout
             </Menu.Item>
-            <Menu.Item isDisabled>Placeholder</Menu.Item>
           </Menu>
         </HStack>
       );

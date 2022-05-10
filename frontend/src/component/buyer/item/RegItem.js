@@ -136,7 +136,7 @@ const RegItem = ({ navigation, route }) => {
           alignSelf: 'center',
         }}
         />    
-        <Text style={styles.lister}>Listed by: {listing.posterName} | Follow Seller | Report Item </Text>
+        <Text style={styles.lister}>Listed by: {listing.posterName}</Text>
         <Text style={styles.desc}>{listing.itemDescr}</Text>
         <View style={{
           borderBottomColor: 'black',

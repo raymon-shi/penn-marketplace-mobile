@@ -137,7 +137,7 @@ router.post('/findUsersOnName', async (req, res) => {
 // Route find a user by penn email
 router.post('/findUserOnEmail', async (req, res) => {
   try {
-    const matchedUser = await User.find({ email: req.body.email });
+    const matchedUser = await User.findOne({ email: req.body.email });
     res.send(matchedUser);
   } catch (error) {
     res.status(500).send('An unknown error occured.');

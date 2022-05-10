@@ -48,6 +48,9 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     color: '#33425B',
   },
+  boldText: {
+    fontWeight: 'bold',
+  },
 });
 
 const Home = ({ navigation }) => {
@@ -86,6 +89,7 @@ const Home = ({ navigation }) => {
         }}
       >
         <View style={styles.carouselSlide}>
+          <Text style={styles.boldText}>{item.itemName}</Text>
           <Text>{`$${item.price}`}</Text>
           <Text>{`Listed by ${item.posterName && item.posterName.split(' ')[0]}`}</Text>
         </View>
@@ -123,6 +127,7 @@ const Home = ({ navigation }) => {
         }}
       >
         <View style={styles.carouselSlide}>
+          <Text style={styles.boldText}>{item.itemName}</Text>
           <Text>{`Highest Bid: $${item.price}`}</Text>
           <Text>{`Listed by ${item.posterName.split(' ')[0]}`}</Text>
         </View>

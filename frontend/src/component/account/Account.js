@@ -38,7 +38,7 @@ const Account = ({ route, navigation }) => {
 
   useFocusEffect(() => {
     async function effect() {
-      const { data } = await axios.post(`${serverURL}/account/findUserOnEmail`, { email: route.params.email });
+      const { data } = await axios.post(`${serverURL}/account/findUserOnEmail`, { email: route.params.userEmail });
       user.current = data;
     }
     effect();

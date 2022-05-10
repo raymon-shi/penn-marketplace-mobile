@@ -23,7 +23,6 @@ const Chat = ({ showModal, setShowModal, email, name }) => {
     try {
       const { data } = await axios.post(`${serverURL}/chat/followed`, { email });
       setFriendList(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -33,7 +32,6 @@ const Chat = ({ showModal, setShowModal, email, name }) => {
     try {
       const { data } = await axios.post(`${serverURL}/chat/messages`, { senderName: name, receiverName: friendNameRef.current });
       setMessages(data);
-      console.log(messages);
     } catch (error) {
       console.log(error);
     }
@@ -122,7 +120,6 @@ const Chat = ({ showModal, setShowModal, email, name }) => {
       <Modal isOpen={showFriendChat} onClose={() => setShowFriendChat(false)}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
-          {console.log(friendNameRef.current)}
           <Modal.Header>{friendNameRef.current}</Modal.Header>
           <Modal.Body>
             {messages.map((message, index) =>

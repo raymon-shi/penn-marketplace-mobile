@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import {
-  Platform, SafeAreaView, View, Pressable, StyleSheet, Text, Image, ScrollView, TextInput
+  Platform, SafeAreaView, View, Pressable, StyleSheet, Text, Image, ScrollView, TextInput,
 } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
@@ -160,7 +160,7 @@ const BidItem = ({ navigation, route }) => {
           alignSelf: 'center',
         }}
         />    
-        <Text style={styles.lister}>Listed by: {listing.posterName} | Follow Seller | Report Item </Text>
+        <Text style={styles.lister}>Listed by: {listing.posterName}</Text>
         <Text style={styles.desc}>{listing.itemDescr}</Text>
         <View style={{
           borderBottomColor: 'black',

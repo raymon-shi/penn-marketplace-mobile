@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
 const Profile = ({ route, navigation }) => (
   <SafeAreaView>
     <AccountHeader page="Profile" navigation={navigation} />
-    {route.params.user.reports.length === 0 ? null
+    {route.params.user && route.params.user.reports && route.params.user.reports.length === 0 ? null
       : (
         <View style={{ flexDirection: 'row', margin: '1%' }}>
           <Image style={styles.image} source={ExclamationIcon} />
           <Text style={{ marginLeft: '2%' }}>
-            {route.params.user.reports.length} other users have reported you.
+            {route.params.user && route.params.user.reports && route.params.user.reports.length} other users have reported you.
           </Text>
         </View>
       )}

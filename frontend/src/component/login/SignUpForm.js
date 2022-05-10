@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { Modal, FormControl, Input, Button, Select, Alert, Text } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 
 import { data } from './data/index';
+const { manifest } = Constants;
+
+// send to correct server (different if web vs expo app)
+const serverURL = Platform.OS === 'web' ? 'http://localhost:8081' : `http://${manifest.debuggerHost.split(':').shift()}:8081`;
 
 const styles = StyleSheet.create({
   container: {
@@ -23,8 +28,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
-
-const serverURL = 'http://localhost:8081';
 
 const SignUpForm = ({ showSignUp, setShowSignUp, navigation }) => {
   const [firstName, setFirstName] = useState('');
