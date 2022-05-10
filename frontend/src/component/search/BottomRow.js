@@ -87,7 +87,7 @@ const BottomRow = ({ navigationRef }) => {
     if (isLoggedIn) {
       return (
         <HStack space={3} justifyContent="center" background="black" style={styles.footer}>
-          <Button onPress={() => navigationRef.current?.navigate('Account')} style={styles.button}>
+          <Button onPress={() => navigationRef.current?.navigate('Account', { userEmail: email })} style={styles.button}>
             <Icon as={FontAwesome} style={styles.icon} name="user" size="8" />
           </Button>
           <Button onPress={() => navigationRef.current?.navigate('Cart')} style={styles.button}>

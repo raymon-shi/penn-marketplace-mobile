@@ -40,42 +40,38 @@ router.post('/signup', isPennStudent, async (req, res, next) => {
 
 // route to login
 router.post('/login', async (req, res, next) => {
-  // const { email, password } = req.body;
-  // try {
-  //   const user = await User.findOne({ email });
-  //   const match = await bcrypt.compare(password, user.password);
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    const match = await bcrypt.compare(password, user.password);
 
-  //   // if past the lockout period
-  //   if (new Date().getTime() > user.lockedOutTime) {
-  //     // if the passwords match
-  //     if (match) {
-  //       req.session.email = email;
-  //       req.session.name = user.name;
-  //       // reset the lockout period
-  //       await User.updateOne({ email }, { loginAttempts: 0 });
-  //       await User.updateOne({ email }, { lockedOutTime: 0 });
-  //       res.send(user);
-  //     } else {
-  //       // otherwise, increase the login attempt and check if exceed and increase lockout period
-  //       await User.updateOne({ email }, { loginAttempts: user.loginAttempts + 1 });
-  //       if (user.loginAttempts >= 3) {
-  //         await User.updateOne({ email }, { lockedOutTime: new Date(new Date().getTime() + 1 * 60000).getTime() });
-  //       }
-  //       next(new Error('There was not a match!'));
-  //     }
-  //   } else {
-  //     // if still in lockout period, increase the attempt
-  //     await User.updateOne({ email }, { loginAttempts: user.loginAttempts + 1 });
-  //     next(new Error('There was not a match'));
-  //   }
-  // } catch (error) {
-  //   // catch errors
-  //   next(new Error(`Error inside /login with error message: ${error}`));
-  // }
-  const user = await User.findOne({ email: req.body.email });
-  req.session.email = user.email;
-  req.session.name = user.name;
-  res.send(user);
+    // if past the lockout period
+    if (new Date().getTime() > user.lockedOutTime) {
+      // if the passwords match
+      if (match) {
+        req.session.email = email;
+        req.session.name = user.name;
+        // reset the lockout period
+        await User.updateOne({ email }, { loginAttempts: 0 });
+        await User.updateOne({ email }, { lockedOutTime: 0 });
+        res.send(user);
+      } else {
+        // otherwise, increase the login attempt and check if exceed and increase lockout period
+        await User.updateOne({ email }, { loginAttempts: user.loginAttempts + 1 });
+        if (user.loginAttempts >= 3) {
+          await User.updateOne({ email }, { lockedOutTime: new Date(new Date().getTime() + 1 * 60000).getTime() });
+        }
+        next(new Error('There was not a match!'));
+      }
+    } else {
+      // if still in lockout period, increase the attempt
+      await User.updateOne({ email }, { loginAttempts: user.loginAttempts + 1 });
+      next(new Error('There was not a match'));
+    }
+  } catch (error) {
+    // catch errors
+    next(new Error(`Error inside /login with error message: ${error}`));
+  }
 });
 
 // route get user session information
