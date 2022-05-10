@@ -33,12 +33,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const Account = ({ navigation }) => {
+const Account = ({ route, navigation }) => {
   const user = useRef({});
 
   useFocusEffect(() => {
     async function effect() {
-      const { data } = await axios.post(`${serverURL}/account/login`, { email: 'liufei@sas.upenn.edu' });
+      const { data } = await axios.post(`${serverURL}/account/findUserOnEmail`, { email: route.params.email });
       user.current = data;
     }
     effect();
