@@ -83,7 +83,7 @@ Coming soon...
 -   Nodemon
 
 ## Web App Version
-https://github.com/cis350/project-penn-marketplace
+https://github.com/raymon-shi/penn-marketplace
 
 ## Credit
 | Name      | GitHub Username |
